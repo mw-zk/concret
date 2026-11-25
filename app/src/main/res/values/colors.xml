@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="qgu_navy">#16324F</color>
+    <color name="qgu_navy_dark">#10263D</color>
+    <color name="qgu_sage">#8BB174</color>
+    <color name="surface_bg">#F3F6FA</color>
+    <color name="white">#FFFFFF</color>
+</resources>
