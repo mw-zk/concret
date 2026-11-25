@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 webView.evaluateJavascript(
                     "(function(){var m=document.getElementById('printModal');if(m&&!m.classList.contains('hidden')){m.classList.add('hidden');return 'closed';}return 'exit';})()"
                 ) { res ->
-                    if (res != ""closed"") {
+                   if (res?.contains("closed") != true) {
                         if (webView.canGoBack()) {
                             webView.goBack()
                         } else {
