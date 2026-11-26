@@ -725,6 +725,66 @@ html, body {
   border-right: 4px solid #d97706;
 }
 
+.field-hint {
+  font-size: 0.74rem;
+  color: var(--qgu-navy-mid);
+  font-weight: 600;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.field-hint.invalid {
+  color: var(--danger);
+}
+
+.error-panel {
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-right: 5px solid var(--danger);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  color: #7f1d1d;
+}
+
+.error-panel-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #991b1b;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-panel-block {
+  background: #ffffff;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  padding: 10px 13px;
+  margin-top: 8px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+.error-panel-block.solution {
+  border-color: #bae6fd;
+  border-right: 4px solid var(--primary);
+  background: #f0f9ff;
+}
+
+.error-panel-label {
+  display: inline-block;
+  font-weight: 800;
+  margin-left: 6px;
+  color: #991b1b;
+}
+
+.error-panel-block.solution .error-panel-label {
+  color: var(--primary-dark);
+}
+
 /* CAD Toolbar & Frame */
 .cad-toolbar {
   display: flex;
@@ -1430,10 +1490,14 @@ html, body {
 
         <div id="autoConstraintsWrap" class="form-grid">
           <div class="field">
-            <label for="hMax">أقصى عمق h_max (mm - اختياري)</label>
+            <label for="hMax">أقصى عمق / ارتفاع h_max (mm - اختياري)</label>
             <input type="text" inputmode="decimal" id="hMax" placeholder="Unconstrained" />
           </div>
           <div class="field">
+            <label for="bwMax">أقصى عرض bw_max (mm - اختياري)</label>
+            <input type="text" inputmode="decimal" id="bwMax" placeholder="Unconstrained" />
+          </div>
+          <div class="field full">
             <label for="bwFixed">عرض ثابت bw (mm - اختياري)</label>
             <input type="text" inputmode="decimal" id="bwFixed" placeholder="Auto (≈ 0.5d)" />
           </div>
@@ -1498,6 +1562,15 @@ html, body {
               <option value="both_ends_continuous">Both Ends Continuous (مستمر من جهتين)</option>
               <option value="direct_moment">Direct Mu (عزم مباشر)</option>
               <option value="continuous_aci">Continuous Beam (ACI 6.5 — مستمر متعدد)</option>
+            </select>
+          </div>
+
+          <div class="field full hidden" id="exteriorEndWrap">
+            <label for="exteriorEndType">نوع المسند الطرفي (Exterior Support)</label>
+            <select id="exteriorEndType">
+              <option value="column">Integral Column (عمود متصل: L²/14 و L²/16)</option>
+              <option value="spandrel">Spandrel Beam (جسر طرفي: L²/14 و L²/24)</option>
+              <option value="unrestrained">Unrestrained (غير مقيد: L²/11 و 0)</option>
             </select>
           </div>
 
@@ -1697,8 +1770,16 @@ html, body {
 
         <div class="form-grid">
           <div class="field">
-            <label for="fc">مقاومة الانضغاط f'c (MPa)</label>
+            <label for="fcSpecimenType">نوع فحص الخرسانة (Specimen)</label>
+            <select id="fcSpecimenType">
+              <option value="cylinder">أسطوانة Cylinder (17–55 MPa)</option>
+              <option value="cube">مكعب Cube (21.25–68.75 MPa)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fc" id="fcLabel">مقاومة الأسطوانة f'c (MPa)</label>
             <input type="text" inputmode="decimal" id="fc" value="28" />
+            <span id="fcConvHint" class="field-hint">النطاق المسموح: 17–55 MPa</span>
           </div>
           <div class="field">
             <label for="fy">إجهاد الخضوع fy (MPa)</label>
@@ -1764,6 +1845,7 @@ html, body {
       <div class="card cad-card" id="cadPrintCard">
         <div class="status-bar" id="statusBar"></div>
         <div class="alert-list hidden" id="alertList"></div>
+        <div class="error-panel hidden" id="errorPanel" role="alert"></div>
 
         <!-- Continuous ACI 6.5 Section Switcher -->
         <div id="continuousOutputPanel" class="hidden" style="margin-bottom:14px;">
@@ -2053,8 +2135,7 @@ html, body {
    * @returns {number}
    */
   function calcRhoMin(fc, fy) {
-    const fyEff = Math.min(fy, 550); // ACI 9.6.1.2 limit
-    return Math.max(Math.sqrt(fc) / (4 * fyEff), 1.4 / fyEff);
+    return Math.max(Math.sqrt(fc) / (4 * fy), 1.4 / fy);
   }
 
   /**
@@ -3444,6 +3525,9 @@ html, body {
     const hf = input.hf || 0;
     const reinforcementMode = input.reinforcementMode || 'auto'; // 'auto' | 'singly' | 'doubly'
     const hMax = input.hMax && input.hMax > 0 ? input.hMax : null;
+    const isoCap = (sectionType === 'isolated_t' && input.bfActual && input.bfActual > 0) ? input.bfActual : null;
+    const rawBwMax = input.bwMax && input.bwMax > 0 ? input.bwMax : null;
+    const bwMax = (rawBwMax && isoCap) ? Math.min(rawBwMax, isoCap) : (rawBwMax || isoCap);
 
     const rhoMin = C.calcRhoMin(fc, fy);
     const rhoMax = C.calcRhoMax(fc, fy, es, epsCu);
@@ -3476,7 +3560,7 @@ html, body {
       : L.computeMinThickness(spanM, supportType, fy);
 
     const dOffset = cover + stirrupDia + 12.5; // assumed ~25mm bar half-dia
-    let bw = input.bwFixed || 250;
+    let bw = input.bwFixed || (bwMax ? Math.min(250, Math.max(150, Math.floor(bwMax / 25) * 25)) : 250);
     let h = input.hFixed || Math.max(300, Math.ceil(deflInfo.hMin / 25) * 25);
     if (hMax && h > hMax && hMax >= deflInfo.hMin) {
       h = Math.max(250, Math.floor(hMax / 25) * 25);
@@ -3529,10 +3613,16 @@ html, body {
         bCalc = Math.max(bCalc, bMinDoubly);
       }
 
-      const bNew = input.bwFixed || (Math.ceil(bCalc / 25) * 25);
+      let bNew = input.bwFixed || (Math.ceil(bCalc / 25) * 25);
+      if (!input.bwFixed && bwMax && bNew > bwMax) {
+        bNew = Math.max(150, Math.floor(bwMax / 25) * 25);
+        // Recompute required depth using the capped width bNew so h compensates cleanly
+        const dForCappedB = Math.sqrt((muKnm * 1e6) / (Math.max(RuTarget, 0.5) * bNew));
+        hCalc = Math.max(hCalc, dForCappedB + dOffset);
+      }
       let hNew = input.hFixed || (Math.ceil(hCalc / 25) * 25);
-      if (!input.hFixed && hMax && hNew > hMax && hMax >= (deflInfo.hMin || 0)) {
-        hNew = Math.max(250, Math.floor(hMax / 25) * 25);
+      if (!input.hFixed && hMax && hNew > hMax) {
+        hNew = Math.max(200, Math.floor(hMax / 25) * 25);
       }
 
       iterations.push({
@@ -3717,16 +3807,34 @@ html, body {
         c = a / beta1;
         steps.push('(ρ - ρ\') = ' + C.roundTo(rho - rhoPrime, 5) + ' ≥ K (' + C.roundTo(K, 5) + ') ← حديد الضغط يخضع (f\'s = fy).');
       } else {
-        // Solve quadratic: [0.85*fc*beta1*b]*c^2 + [(epsCu*Es - 0.85*fc)*As' - As*fy]*c - epsCu*Es*As'*d' = 0
+        // First solve assuming compression steel is in compression (c >= d', with 0.85*fc concrete displacement)
         const A1 = 0.85 * fc * beta1 * b;
         const A2 = asPrime * (epsCuEs - 0.85 * fc) - as * fy;
         const A3 = -epsCuEs * asPrime * dPrime;
         const disc = A2 * A2 - 4 * A1 * A3;
         c = (-A2 + Math.sqrt(Math.max(0, disc))) / (2 * A1);
         a = beta1 * c;
-        fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
-        as1 = (as * fy - asPrime * fsPrime) / fy;
-        steps.push('(ρ - ρ\') = ' + C.roundTo(rho - rhoPrime, 5) + ' < K (' + C.roundTo(K, 5) + ') ← حديد الضغط لا يخضع (f\'s = ' + C.roundTo(fsPrime, 1) + ' MPa).');
+
+        if (c < dPrime) {
+          // Neutral axis rises above A's -> upper steel is in TENSION (cracked zone, NO 0.85*fc deduction!)
+          const A2t = asPrime * epsCuEs - as * fy;
+          const discT = A2t * A2t - 4 * A1 * A3;
+          c = (-A2t + Math.sqrt(Math.max(0, discT))) / (2 * A1);
+          a = beta1 * c;
+          let fsPrimeT = c > 0 ? epsCuEs * ((c - dPrime) / c) : -fy;
+          if (fsPrimeT < -fy) {
+            fsPrimeT = -fy;
+            a = ((as + asPrime) * fy) / (0.85 * fc * b);
+            c = a / beta1;
+          }
+          fsPrime = fsPrimeT;
+          as1 = (as * fy - asPrime * fsPrime) / fy;
+          steps.push('محور التعادل أعلى من حديد الضغط (c = ' + C.roundTo(c, 2) + ' mm < d\' = ' + C.roundTo(dPrime, 1) + ' mm): الحديد العلوي دخل في منطقة الشد (f\'s = ' + C.roundTo(fsPrime, 1) + ' MPa) دون خصم خرسانة مزاحة.');
+        } else {
+          fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
+          as1 = (as * fy - asPrime * fsPrime) / fy;
+          steps.push('(ρ - ρ\') = ' + C.roundTo(rho - rhoPrime, 5) + ' < K (' + C.roundTo(K, 5) + ') ← حديد الضغط لا يخضع (f\'s = ' + C.roundTo(fsPrime, 1) + ' MPa).');
+        }
       }
 
       const phiInfo = C.calcPhiFlexure(c, dt, fy, es, epsCu);
@@ -3736,11 +3844,14 @@ html, body {
         warnings.push('تحذير: المقطع مسيطر عليه بالانضغاط (φ = 0.65).');
       }
 
-      // Displaced concrete area deduction (0.85*fc) unified across equilibrium quadratic & Mn
+      // Displaced concrete area deduction (0.85*fc) applies ONLY when compression steel is in compression (c >= d')
       let ccForce, csForce;
       if (yields) {
         ccForce = 0.85 * fc * a * b;
         csForce = asPrime * fy;
+      } else if (c < dPrime) {
+        ccForce = 0.85 * fc * a * b;
+        csForce = asPrime * fsPrime; // negative (tension force) in cracked zone -> no 0.85*fc deduction
       } else {
         ccForce = 0.85 * fc * a * b;
         csForce = asPrime * (fsPrime - 0.85 * fc);
@@ -3913,13 +4024,30 @@ html, body {
         if (a < hf) {
           const A1f = 0.85 * fc * beta1 * be;
           const A2f = asPrime * (epsCuEs - 0.85 * fc) - as * fy;
-          const cF = (-A2f + Math.sqrt(Math.max(0, A2f * A2f - 4 * A1f * A3))) / (2 * A1f);
-          c = cF;
+          c = (-A2f + Math.sqrt(Math.max(0, A2f * A2f - 4 * A1f * A3))) / (2 * A1f);
           a = beta1 * c;
-          fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
-          const ccFlange = 0.85 * fc * a * be;
-          const csForce = asPrime * (fsPrime - 0.85 * fc);
-          mn = (ccFlange * (d - a / 2) + csForce * (d - dPrime)) / 1e6;
+          if (c < dPrime) {
+            const A2ft = asPrime * epsCuEs - as * fy;
+            c = (-A2ft + Math.sqrt(Math.max(0, A2ft * A2ft - 4 * A1f * A3))) / (2 * A1f);
+            a = beta1 * c;
+            fsPrime = Math.max(-fy, c > 0 ? epsCuEs * ((c - dPrime) / c) : -fy);
+            const ccFlange = 0.85 * fc * a * be;
+            const csForce = asPrime * fsPrime;
+            mn = (ccFlange * (d - a / 2) + csForce * (d - dPrime)) / 1e6;
+          } else {
+            fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
+            const ccFlange = 0.85 * fc * a * be;
+            const csForce = asPrime * (fsPrime - 0.85 * fc);
+            mn = (ccFlange * (d - a / 2) + csForce * (d - dPrime)) / 1e6;
+          }
+        } else if (c < dPrime) {
+          const A2wt = asPrime * epsCuEs - asWebTotal * fy;
+          c = (-A2wt + Math.sqrt(Math.max(0, A2wt * A2wt - 4 * A1 * A3))) / (2 * A1);
+          a = beta1 * c;
+          fsPrime = Math.max(-fy, c > 0 ? epsCuEs * ((c - dPrime) / c) : -fy);
+          const ccWeb = 0.85 * fc * a * bw;
+          const csForce = asPrime * fsPrime;
+          mn = (ccWeb * (d - a / 2) + csForce * (d - dPrime) + asf * fy * (d - hf / 2)) / 1e6;
         } else {
           fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
           const ccWeb = 0.85 * fc * a * bw;
@@ -4538,7 +4666,22 @@ html, body {
         aggSize: aggSize,
         layerClearSpacing: layerClearSpacing,
         minBars: 2,
+        preferredBarDia: params.preferredBarDia,
       });
+      // Fall back to any optimal bar only if preferredBarDia cannot fit within 2 layers
+      if (params.preferredBarDia && !upgradedTension.spacingOk) {
+        upgradedTension = selectReinforcementBars({
+          asRequired: targetAsReq,
+          bw: bw,
+          h: h,
+          barStandard: standard,
+          cover: cover,
+          stirrupDia: stirrupDia,
+          aggSize: aggSize,
+          layerClearSpacing: layerClearSpacing,
+          minBars: 2,
+        });
+      }
 
       // Ensure tension area strictly grows if re-selection picked same bars
       if (upgradedTension.totalArea <= tensionLayout.totalArea + 1e-6) {
@@ -4698,12 +4841,23 @@ html, body {
     return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
   }
 
+  function hasText(val) {
+    return val !== undefined && val !== null && String(val).trim() !== '';
+  }
+
+  function rawNum(val) {
+    if (!hasText(val)) return undefined;
+    return C.parseArabicNumber(val, NaN);
+  }
+
   /**
    * Normalizes raw user/UI input object (supporting Arabic numerals & expanded code parameters).
    */
   function normalizeInput(raw) {
     const mat = Object.assign({}, C.DEFAULT_MATERIAL, raw.material || {});
-    const fc = num(raw.fc !== undefined ? raw.fc : mat.fc, 28);
+    const fcSpecimenType = raw.fcSpecimenType === 'cube' ? 'cube' : 'cylinder';
+    const fcInput = num(raw.fc !== undefined ? raw.fc : mat.fc, NaN);
+    const fc = Number.isFinite(fcInput) ? (fcSpecimenType === 'cube' ? fcInput * 0.8 : fcInput) : NaN;
     const fy = num(raw.fy !== undefined ? raw.fy : mat.fy, 420);
     const es = num(raw.es !== undefined ? raw.es : mat.es, 200000);
     const epsCu = num(raw.epsCu !== undefined ? raw.epsCu : mat.epsCu, 0.003);
@@ -4764,8 +4918,53 @@ html, body {
       reinforcementMode: reinforcementMode,
       rhoTargetCustom: optNum(raw.rhoTargetCustom),
       hMax: optNum(raw.hMax),
+      hMaxRaw: rawNum(raw.hMax),
+      bwMax: optNum(raw.bwMax),
+      bwMaxRaw: rawNum(raw.bwMax),
       bwFixed: optNum(raw.bwFixed),
+      bwFixedRaw: rawNum(raw.bwFixed),
       hFixed: optNum(raw.hFixed),
+      rawInputs: {
+        bw: rawNum(raw.bw !== undefined ? raw.bw : raw.b),
+        h: rawNum(raw.h),
+        hf: rawNum(raw.hf),
+        bfActual: rawNum(raw.bfActual !== undefined ? raw.bfActual : raw.bf),
+        spanMeters: rawNum(raw.spanMeters),
+        dl: rawNum(raw.dl),
+        ll: rawNum(raw.ll),
+        directMoment: rawNum(raw.directMoment !== undefined ? raw.directMoment : raw.mu),
+        directVu: rawNum(raw.directVu),
+        loadFactorDL: rawNum(raw.loadFactorDL),
+        loadFactorLL: rawNum(raw.loadFactorLL),
+        fy: rawNum(raw.fy),
+        es: rawNum(raw.es),
+        epsCu: rawNum(raw.epsCu),
+        gammaC: rawNum(raw.gammaC),
+        cover: rawNum(raw.cover),
+        stirrupDia: rawNum(raw.stirrupDia),
+        aggSize: rawNum(raw.aggSize),
+        layerClearSpacing: rawNum(raw.layerClearSpacing),
+        s1Mm: rawNum(raw.s1Mm !== undefined ? raw.s1Mm : raw.s1),
+        s2Mm: rawNum(raw.s2Mm !== undefined ? raw.s2Mm : raw.s2),
+        dOverride: rawNum(raw.dOverride),
+        dPrimeOverride: rawNum(raw.dPrimeOverride),
+        rhoTargetCustom: rawNum(raw.rhoTargetCustom),
+        slabS1: rawNum(rawSlab.s1),
+        slabS2: rawNum(rawSlab.s2),
+        slabCant: rawNum(rawSlab.cantileverWidth),
+        slabDL: rawNum(rawSlab.slabDL),
+        slabLL: rawNum(rawSlab.slabLL),
+        anTensionCount: raw.analysis ? rawNum(raw.analysis.tensionBarCount) : undefined,
+        anCompCount: raw.analysis ? rawNum(raw.analysis.compBarCount) : undefined,
+        anAsManual: raw.analysis ? rawNum(raw.analysis.asManual) : undefined,
+        anDManual: raw.analysis ? rawNum(raw.analysis.dManual) : undefined,
+        fyPresent: raw.fy !== undefined,
+        bwPresent: (raw.bw !== undefined || raw.b !== undefined),
+        hPresent: raw.h !== undefined,
+        dlPresent: raw.dl !== undefined,
+        llPresent: raw.ll !== undefined,
+        spanPresent: raw.spanMeters !== undefined,
+      },
       momentSign: momentSign,
       isNegativeMoment: momentSign === 'negative',
       spanMeters: spanMeters,
@@ -4795,6 +4994,8 @@ html, body {
       dPrimeOverride: optNum(raw.dPrimeOverride),
       lockDepthOverride: Boolean(raw.lockDepthOverride),
       analysis: raw.analysis || null,
+      fcSpecimenType: fcSpecimenType,
+      fcInput: fcInput,
       fc: fc,
       fy: fy,
       es: es,
@@ -4929,7 +5130,11 @@ html, body {
 
       if (attempt === 16) break;
 
-      const atHMax = inp.hMax && h >= inp.hMax - 1;
+      const atHMax = Boolean(inp.hMax && (h + 25 > inp.hMax));
+      const effectiveBwCap = (inp.sectionType === 'isolated_t' && inp.bfActual > 0)
+        ? Math.min(inp.bwMax || Infinity, inp.bfActual)
+        : (inp.bwMax || Infinity);
+      const atBwMax = Number.isFinite(effectiveBwCap) && (bw + 25 > effectiveBwCap);
       let changed = false;
 
       if (hasShallowNA) {
@@ -4945,22 +5150,25 @@ html, body {
         h = Math.ceil(loadResult.deflection.hMin / 25) * 25;
         repairLog.push('Auto-Resolved Deflection: h = ' + h + ' mm ≥ h_min.');
         changed = true;
-      } else if ((!tensionSpacingOk || !compSpacingOk) && !inp.bwFixed) {
+      } else if ((!tensionSpacingOk || !compSpacingOk) && !inp.bwFixed && !atBwMax) {
         bw += 25;
         repairLog.push('Auto-Resolved Spacing: bw = ' + bw + ' mm.');
+        changed = true;
+      } else if ((!tensionSpacingOk || !compSpacingOk) && !inp.hFixed && !atHMax) {
+        h += 25;
+        repairLog.push('Auto-Resolved Spacing within bw_max: h = ' + h + ' mm.');
         changed = true;
       } else if (!shearOk) {
         if (!inp.hFixed && !atHMax) {
           h += 25;
           repairLog.push('Auto-Resolved Shear Capacity: h = ' + h + ' mm.');
           changed = true;
-        } else if (!inp.bwFixed) {
+        } else if (!inp.bwFixed && !atBwMax) {
           bw += 25;
           repairLog.push('Auto-Resolved Shear Capacity: bw = ' + bw + ' mm.');
           changed = true;
         }
       } else if (!crackOk) {
-        // Reduce preferred bar diameter if crack spacing exceeded s_max, or adjust bw
         if (!inp.bwFixed && bw > 200) {
           bw = Math.max(200, bw - 25);
           changed = true;
@@ -4970,15 +5178,15 @@ html, body {
           changed = true;
         }
       } else if (!validOk || hasCompControl || !safeOk || !singlyLimitOk) {
-        if (activeMode === 'auto' && atHMax && validOk && designDetail.classification === 'singly') {
+        if (activeMode === 'auto' && (atHMax || atBwMax) && validOk && designDetail.classification === 'singly') {
           activeMode = 'doubly';
-          repairLog.push('Auto-Switched to Doubly Reinforced to satisfy h_max.');
+          repairLog.push('Auto-Switched to Doubly Reinforced to satisfy dimension limits.');
           changed = true;
         } else if (!inp.hFixed && !atHMax) {
           h += 25;
           repairLog.push('Auto-Resolved Capacity: h = ' + h + ' mm.');
           changed = true;
-        } else if (!inp.bwFixed) {
+        } else if (!inp.bwFixed && !atBwMax) {
           bw += 25;
           repairLog.push('Auto-Resolved Capacity within h_max: bw = ' + bw + ' mm.');
           changed = true;
@@ -5064,6 +5272,7 @@ html, body {
         reinforcementMode: inp.reinforcementMode,
         rhoTargetCustom: inp.rhoTargetCustom,
         hMax: inp.hMax,
+        bwMax: inp.bwMax,
         bwFixed: inp.bwFixed,
         hFixed: inp.hFixed,
         hf: inp.hf,
@@ -5086,7 +5295,7 @@ html, body {
     let contResult;
     let designedSections;
 
-    const maxContRepair = inp.autoSize ? 8 : 0;
+    const maxContRepair = inp.autoSize ? 14 : 0;
     for (let rep = 0; rep <= maxContRepair; rep++) {
       contResult = L.analyzeContinuousACI65({
         spans: spansParsed,
@@ -5194,17 +5403,38 @@ html, body {
 
       if (!inp.autoSize) break;
 
-      const allOk = designedSections.every(function (s) {
-        return s.valid && s.isSafe && s.tensionBars && s.tensionBars.spacingOk;
-      });
-      if (allOk && h >= contResult.deflection.hMin - 1e-6) break;
+      const contBwCap = (inp.sectionType === 'isolated_t' && inp.bfActual > 0)
+        ? Math.min(inp.bwMax || Infinity, inp.bfActual)
+        : (inp.bwMax || Infinity);
+      const canGrowBw = !inp.bwFixed && (bw + 25 <= contBwCap);
+      const canGrowH = !inp.hFixed && (!inp.hMax || h + 25 <= inp.hMax);
 
-      if (designedSections.some(function (s) { return !s.tensionBars || !s.tensionBars.spacingOk; }) && !inp.bwFixed) {
+      const allFlexSafe = designedSections.every(function (s) {
+        return s.valid && s.isSafe && s.phiMn >= s.muApplied - 1e-4 && s.phiZone !== 'compression';
+      });
+      const allTensionSpaceOk = designedSections.every(function (s) {
+        return s.tensionBars && s.tensionBars.spacingOk && s.tensionBars.fitsInTwoLayers;
+      });
+      const allCompSpaceOk = designedSections.every(function (s) {
+        return !s.compressionBars || s.compressionBars.isHangerOnly || s.compressionBars.spacingOk;
+      });
+      const allShearOk = designedSections.every(function (s) {
+        return !s.shearResult || (s.shearResult.sectionAdequate && s.shearResult.isSafe);
+      });
+      const deflOk = h >= contResult.deflection.hMin - 1e-6;
+
+      if (allFlexSafe && allTensionSpaceOk && allCompSpaceOk && allShearOk && deflOk) break;
+
+      if (!deflOk && canGrowH && (!inp.hMax || contResult.deflection.hMin <= inp.hMax)) {
+        h = Math.ceil(contResult.deflection.hMin / 25) * 25;
+      } else if ((!allTensionSpaceOk || !allCompSpaceOk) && canGrowBw) {
         bw += 25;
-      } else if (!inp.hFixed && (!inp.hMax || h + 25 <= inp.hMax)) {
+      } else if ((!allShearOk || !allFlexSafe) && canGrowH) {
         h += 25;
-      } else if (!inp.bwFixed) {
+      } else if (canGrowBw) {
         bw += 25;
+      } else if (canGrowH) {
+        h += 25;
       } else {
         break;
       }
@@ -5246,17 +5476,565 @@ html, body {
   }
 
   /**
+   * Validates concrete compressive strength (17–55 MPa cylinder or equivalent cube 21.25–68.75 MPa)
+   * and basic positive input bounds before running flexural/shear calculations.
+   */
+  function validatePreSolveInputs(inp) {
+    const isCube = inp.fcSpecimenType === 'cube';
+    if (!Number.isFinite(inp.fcInput) || inp.fcInput <= 0 || !Number.isFinite(inp.fc)) {
+      return {
+        valid: false,
+        error: 'قيمة مقاومة الخرسانة غير صالحة.',
+        errorTitle: 'قيمة مقاومة الخرسانة غير صالحة',
+        errorReason: 'الرجاء إدخال قيمة رقمية موجبة لمقاومة انضغاط الخرسانة.',
+        errorSolution: isCube
+          ? 'أدخل مقاومة المكعب fcu ضمن النطاق المسموح (21.25 إلى 68.75 MPa)، والشائع عملياً هو 30–40 MPa.'
+          : 'أدخل مقاومة الأسطوانة f\'c ضمن النطاق المسموح (17 إلى 55 MPa)، والشائع عملياً هو 25–35 MPa.',
+      };
+    }
+
+    if (inp.fc < 17 - 1e-6) {
+      return {
+        valid: false,
+        error: 'مقاومة الخرسانة أقل من 17 MPa (غير فعّالة إنشائياً).',
+        errorTitle: 'مقاومة الخرسانة أقل من الحد الأدنى الإنشائي (ACI 318-19)',
+        errorReason: isCube
+          ? ('مقاومة المكعب المُدخلة (fcu = ' + C.roundTo(inp.fcInput, 2) + ' MPa) تعادل مقاومة أسطوانة f\'c = ' + C.roundTo(inp.fc, 2) + ' MPa، وهي أقل من 17 MPa (ما يعادل 21.25 MPa للمكعب). تُعد الخرسانة دون هذا الحد غير فعّالة إنشائياً للجسور المسلحة.')
+          : ('مقاومة الأسطوانة المُدخلة (f\'c = ' + C.roundTo(inp.fc, 2) + ' MPa) أقل من الحد الأدنى الإنشائي المسموح (17 MPa)، وتُعد غير فعّالة إنشائياً للجسور المسلحة.'),
+        errorSolution: isCube
+          ? 'ارفع مقاومة المكعب fcu إلى 21.25 MPa على الأقل (تعادل 17 MPa للأسطوانة)، ويُفضّل عملياً 30–40 MPa.'
+          : 'ارفع مقاومة الأسطوانة f\'c إلى 17 MPa على الأقل (أو 21.25 MPa للمكعب)، ويُفضّل عملياً 25–35 MPa.',
+      };
+    }
+
+    if (inp.fc > 55 + 1e-6) {
+      return {
+        valid: false,
+        error: 'مقاومة الخرسانة تتجاوز 55 MPa (High-Strength Concrete).',
+        errorTitle: 'مقاومة الخرسانة تتجاوز حد الخرسانة الاعتيادية (High-Strength)',
+        errorReason: isCube
+          ? ('مقاومة المكعب المُدخلة (fcu = ' + C.roundTo(inp.fcInput, 2) + ' MPa) تعادل مقاومة أسطوانة f\'c = ' + C.roundTo(inp.fc, 2) + ' MPa، وهي أعلى من 55 MPa (ما يعادل 68.75 MPa للمكعب)، مما يدخلها ضمن الخرسانة عالية المقاومة (High-Strength Concrete) ذات المعاملات التصميمية الخاصة.')
+          : ('مقاومة الأسطوانة المُدخلة (f\'c = ' + C.roundTo(inp.fc, 2) + ' MPa) أعلى من 55 MPa وتدخل ضمن الخرسانة عالية المقاومة (High-Strength Concrete) التي تتطلب ضوابط ومعاملات خاصة خارج نطاق التصميم الاعتيادي.'),
+        errorSolution: isCube
+          ? 'اختر مقاومة مكعب ضمن النطاق الاعتيادي المسموح: من 21.25 إلى 68.75 MPa (تعادل 17–55 MPa للأسطوانة).'
+          : 'اختر مقاومة أسطوانة ضمن النطاق الاعتيادي المسموح: من 17 إلى 55 MPa (أو 21.25–68.75 MPa للمكعب).',
+      };
+    }
+
+    const riTop = inp.rawInputs || {};
+    if ((riTop.fyPresent && !Number.isFinite(riTop.fy)) || !Number.isFinite(inp.fy) || inp.fy <= 0 || inp.fy > 700) {
+      return {
+        valid: false,
+        error: 'قيمة إجهاد الخضوع fy غير صالحة.',
+        errorTitle: 'قيمة إجهاد خضوع الحديد (fy) خارج النطاق المنطقي',
+        errorReason: 'قيمة fy المُدخلة غير صالحة أو تتجاوز الحدود العملية لحديد التسليح الإنشائي.',
+        errorSolution: 'أدخل قيمة fy قياسية للحديد مثل 280 أو 345 أو 400 أو 420 MPa.',
+      };
+    }
+
+    if (!inp.autoSize && (!Number.isFinite(inp.bw) || inp.bw <= 0 || !Number.isFinite(inp.h) || inp.h <= 0)) {
+      return {
+        valid: false,
+        error: 'أبعاد المقطع غير صالحة.',
+        errorTitle: 'أبعاد المقطع (bw أو h) غير صالحة',
+        errorReason: 'يجب أن يكون عرض الجذع bw والعمق الكلي h أرقاماً موجبة.',
+        errorSolution: 'أدخل أبعاداً هندسية موجبة (مثلاً bw = 300 mm و h = 500 mm) أو فعّل خيار التحديد التلقائي (Auto-Sizing).',
+      };
+    }
+
+    const ri = inp.rawInputs || {};
+    const makeErr = function (title, reason, solution) {
+      return { valid: false, error: title, errorTitle: title, errorReason: reason, errorSolution: solution };
+    };
+
+    // Material & Detailing sanity checks
+    if (ri.es !== undefined && (!Number.isFinite(ri.es) || ri.es < 150000 || ri.es > 250000)) {
+      return makeErr(
+        'معامل مرونة الحديد (Es) خارج النطاق المنطقي',
+        'القيمة المُدخلة لـ Es غير صالحة أو خارج نطاق حديد التسليح القياسي (150,000–250,000 MPa).',
+        'استخدم القيمة القياسية لكود ACI 318-19 وهي 200000 MPa.'
+      );
+    }
+    if (ri.epsCu !== undefined && (!Number.isFinite(ri.epsCu) || ri.epsCu < 0.002 || ri.epsCu > 0.0045)) {
+      return makeErr(
+        'أقصى انفعال للخرسانة (εcu) غير منطقي',
+        'يجب أن تكون قيمة εcu ضمن النطاق الهندسي (0.002 إلى 0.0045).',
+        'استخدم القيمة المعتمدة في كود ACI 318-19 وهي 0.003.'
+      );
+    }
+    if (ri.gammaC !== undefined && (!Number.isFinite(ri.gammaC) || ri.gammaC < 14 || ri.gammaC > 30)) {
+      return makeErr(
+        'كثافة الخرسانة (γc) خارج النطاق الطبيعي',
+        'القيمة المُدخلة لكثافة الخرسانة غير منطقية (النطاق الطبيعي للخرسانة المسلحة 14–30 kN/m³).',
+        'أدخل القيمة القياسية للخرسانة الاعتيادية وهي 24 kN/m³.'
+      );
+    }
+    if (ri.cover !== undefined && (!Number.isFinite(ri.cover) || ri.cover < 15 || ri.cover > 120)) {
+      return makeErr(
+        'قيمة الغطاء الخرساني (Cover) غير صالحة',
+        'الغطاء الخرساني يجب أن يكون بين 15 و 120 mm.',
+        'القيمة القياسية للجسور الداخلية حسب ACI 318-19 هي 40 mm.'
+      );
+    }
+    if (ri.stirrupDia !== undefined && (!Number.isFinite(ri.stirrupDia) || ri.stirrupDia < 6 || ri.stirrupDia > 20)) {
+      return makeErr(
+        'قطر الأتاري (Stirrup Ø) غير صالح',
+        'قطر الأتاري يجب أن يكون بين 6 و 20 mm.',
+        'القيمة العملية الشائعة للأتاري هي 10 mm (أو 8–12 mm).'
+      );
+    }
+    if (ri.aggSize !== undefined && (!Number.isFinite(ri.aggSize) || ri.aggSize <= 0 || ri.aggSize > 60)) {
+      return makeErr(
+        'مقاس الركام (d_agg) غير صالح',
+        'مقاس الركام يجب أن يكون رقماً موجباً بين 5 و 60 mm.',
+        'المقاس القياسي الشائع للركام هو 19 mm.'
+      );
+    }
+    if (ri.layerClearSpacing !== undefined && (!Number.isFinite(ri.layerClearSpacing) || ri.layerClearSpacing < 25 || ri.layerClearSpacing > 100)) {
+      return makeErr(
+        'التباعد الرأسي بين الطبقات غير مطابق للكود',
+        'حسب ACI 25.2.2 لا يجوز أن تقل المسافة الصافية الرأسية بين طبقات القضبان عن 25 mm.',
+        'أدخل قيمة بين 25 و 100 mm (القيمة القياسية 25 mm).'
+      );
+    }
+
+    // Auto-Sizing Max & Fixed Dimension Constraints Validation
+    if (inp.autoSize) {
+      if (inp.hMaxRaw !== undefined) {
+        if (!Number.isFinite(inp.hMaxRaw) || inp.hMaxRaw <= 0) {
+          return makeErr(
+            'قيمة أقصى عمق (h_max) غير صالحة',
+            'أدخلت قيمة غير رقمية أو سالبة/صفرية في خانة أقصى عمق h_max.',
+            'أدخل رقماً موجباً بالمليمتر (مثلاً 500 أو 600 mm) أو اترك الخانة فارغة.'
+          );
+        }
+        if (inp.hMaxRaw < 200) {
+          return makeErr(
+            'أقصى عمق (h_max) صغير جداً إنشائياً',
+            'القيمة المُدخلة (h_max = ' + C.roundTo(inp.hMaxRaw, 1) + ' mm) أقل من 200 mm ولا تكفي لتنفيذ جسر خرساني مسلح بالغطاء والأتاري والحديد.',
+            'ارفع قيمة h_max إلى 200 mm على الأقل (عادةً 350–800 mm) أو اتركها فارغة.'
+          );
+        }
+        if (inp.hMaxRaw > 2500) {
+          return makeErr(
+            'أقصى عمق (h_max) كبير جداً بشكل غير اعتيادي',
+            'القيمة المُدخلة (h_max = ' + C.roundTo(inp.hMaxRaw, 1) + ' mm) تتجاوز 2500 mm.',
+            'تأكد أن القيمة بالمليمتر (مثلاً 600 وليس 6000) أو اتركها فارغة.'
+          );
+        }
+        if (inp.sectionType !== 'rectangular' && inp.hMaxRaw <= inp.hf + 50) {
+          return makeErr(
+            'أقصى عمق (h_max) غير متوافق مع سمك الشفة (hf)',
+            'أقصى عمق محدد (h_max = ' + C.roundTo(inp.hMaxRaw, 1) + ' mm) قريب جداً من أو أقل من سمك الشفة (hf = ' + C.roundTo(inp.hf, 1) + ' mm).',
+            'اجعل h_max أكبر من سمك الشفة hf بـ 100 mm على الأقل.'
+          );
+        }
+      }
+
+      if (inp.bwMaxRaw !== undefined) {
+        if (!Number.isFinite(inp.bwMaxRaw) || inp.bwMaxRaw <= 0) {
+          return makeErr(
+            'قيمة أقصى عرض (bw_max) غير صالحة',
+            'أدخلت قيمة غير رقمية أو سالبة/صفرية في خانة أقصى عرض bw_max.',
+            'أدخل رقماً موجباً بالمليمتر (مثلاً 300 أو 400 mm) أو اترك الخانة فارغة.'
+          );
+        }
+        if (inp.bwMaxRaw < 150) {
+          return makeErr(
+            'أقصى عرض (bw_max) صغير جداً إنشائياً',
+            'القيمة المُدخلة (bw_max = ' + C.roundTo(inp.bwMaxRaw, 1) + ' mm) أقل من 150 mm ولا تكفي للغطاء الخرساني والأتاري وقضبان التسليح.',
+            'ارفع قيمة bw_max إلى 150 mm على الأقل (عادةً 250–500 mm) أو اتركها فارغة.'
+          );
+        }
+        if (inp.bwMaxRaw > 1500) {
+          return makeErr(
+            'أقصى عرض (bw_max) كبير جداً بشكل غير اعتيادي',
+            'القيمة المُدخلة (bw_max = ' + C.roundTo(inp.bwMaxRaw, 1) + ' mm) تتجاوز 1500 mm.',
+            'تأكد أن القيمة بالمليمتر (مثلاً 350 mm) أو اتركها فارغة.'
+          );
+        }
+        if (inp.bwMaxRaw <= 2 * (inp.cover + inp.stirrupDia) + 40) {
+          return makeErr(
+            'أقصى عرض (bw_max) لا يكفي للغطاء والأتاري والحديد',
+            'مع غطاء ' + inp.cover + ' mm وأتاري Ø' + inp.stirrupDia + '، العرض الصافي المتبقي داخل bw_max = ' + inp.bwMaxRaw + ' mm غير كافٍ لسيخين.',
+            'ارفع قيمة bw_max أو راجع قيمة الغطاء الخرساني.'
+          );
+        }
+      }
+
+      if (inp.bwFixedRaw !== undefined) {
+        if (!Number.isFinite(inp.bwFixedRaw) || inp.bwFixedRaw < 150 || inp.bwFixedRaw > 1500) {
+          return makeErr(
+            'قيمة العرض الثابت (bw) غير صالحة',
+            'يجب أن يكون العرض الثابت رقماً بين 150 و 1500 mm.',
+            'أدخل عرضاً عملياً (مثلاً 250 أو 300 mm) أو اتركه فارغاً ليُحسب تلقائياً.'
+          );
+        }
+        if (inp.bwMax !== undefined && inp.bwFixedRaw > inp.bwMax) {
+          return makeErr(
+            'تعارض بين العرض الثابت (bw) وأقصى عرض (bw_max)',
+            'العرض الثابت المُدخل (bw = ' + C.roundTo(inp.bwFixedRaw, 1) + ' mm) أكبر من أقصى عرض مسموح (bw_max = ' + C.roundTo(inp.bwMax, 1) + ' mm).',
+            'اجعل العرض الثابت أصغر من أو مساوياً لـ bw_max، أو اترك أحد الحقلين فارغاً.'
+          );
+        }
+      }
+    } else {
+      // Manual Dimension Checks (catch blank/non-numeric too)
+      if ((ri.bwPresent && !Number.isFinite(ri.bw)) || inp.bw < 120 || inp.bw > 2000) {
+        return makeErr(
+          'عرض الجذع (bw) خارج النطاق الإنشائي',
+          'القيمة المُدخلة لعرض الجذع (bw = ' + (Number.isFinite(ri.bw) ? C.roundTo(ri.bw, 1) + ' mm' : 'فارغة أو غير رقمية') + ') خارج النطاق العملي (120–2000 mm).',
+          'أدخل عرضاً عملياً بالمليمتر (مثلاً 250–400 mm).'
+        );
+      }
+      if ((ri.hPresent && !Number.isFinite(ri.h)) || inp.h < 150 || inp.h > 3000) {
+        return makeErr(
+          'العمق الكلي (h) خارج النطاق الإنشائي',
+          'القيمة المُدخلة للعمق الكلي (h = ' + (Number.isFinite(ri.h) ? C.roundTo(ri.h, 1) + ' mm' : 'فارغة أو غير رقمية') + ') خارج النطاق العملي (150–3000 mm).',
+          'أدخل عمقاً عملياً بالمليمتر (مثلاً 400–750 mm).'
+        );
+      }
+      if (inp.bw <= 2 * (inp.cover + inp.stirrupDia) + 30) {
+        return makeErr(
+          'عرض الجذع (bw) لا يكفي للغطاء الخرساني والحديد',
+          'مع غطاء ' + inp.cover + ' mm وأتاري Ø' + inp.stirrupDia + ' لا تبقى مساحة صافية كافية لوضع قضبان التسليح داخل bw = ' + inp.bw + ' mm.',
+          'زِد عرض الجذع bw أو راجع قيمة الغطاء الخرساني.'
+        );
+      }
+      const maxPhysD = inp.h - inp.cover - inp.stirrupDia - 4;
+      if (inp.dOverride !== undefined && inp.dOverride > maxPhysD) {
+        return makeErr(
+          'تعارض في العمق الفعال (d أكبر من الحد الفيزيائي الممكن)',
+          'العمق الفعال المُدخل (d = ' + C.roundTo(inp.dOverride, 1) + ' mm) يتجاوز الحد الأقصى الممكن داخل المقطع بعد خصم الغطاء والأتاري (' + C.roundTo(maxPhysD, 1) + ' mm).',
+          'اجعل قيمة d أقل من ' + C.roundTo(maxPhysD, 0) + ' mm، أو اتركها فارغة ليتم حسابها تلقائياً.'
+        );
+      }
+      if (ri.dOverride !== undefined && (!Number.isFinite(ri.dOverride) || ri.dOverride <= 0)) {
+        return makeErr(
+          'قيمة العمق الفعال (d) غير صالحة',
+          'العمق الفعال d يجب أن يكون رقماً موجباً أقل من h.',
+          'أدخل قيمة موجبة صحيحة أو اترك الخانة فارغة.'
+        );
+      }
+      if (ri.dPrimeOverride !== undefined && (!Number.isFinite(ri.dPrimeOverride) || ri.dPrimeOverride <= 0 || ri.dPrimeOverride >= inp.h / 2)) {
+        return makeErr(
+          'قيمة عمق حديد الضغط (d\') غير منطقية',
+          'عمق حديد الضغط d\' يجب أن يكون رقماً موجباً وأقل من نصف العمق الكلي h.',
+          'أدخل قيمة عملية (مثلاً 50–70 mm) أو اتركها فارغة ليتم حسابها تلقائياً.'
+        );
+      }
+    }
+
+    // Target rho validation (if user supplied)
+    if (ri.rhoTargetCustom !== undefined && (!Number.isFinite(ri.rhoTargetCustom) || ri.rhoTargetCustom < 0.001 || ri.rhoTargetCustom > 0.06)) {
+      return makeErr(
+        'النسبة المستهدفة للحديد (Target ρ) غير منطقية',
+        'القيمة المُدخلة لـ Target ρ خارج النطاق الهندسي (0.001 إلى 0.06).',
+        'اتركها فارغة ليعتمد الكود القيمة المثلى تلقائياً (0.6 × ρ_max) أو أدخل قيمة بين 0.004 و 0.025.'
+      );
+    }
+
+    // Flanged section geometry checks
+    if (inp.sectionType !== 'rectangular') {
+      if (!Number.isFinite(inp.hf) || inp.hf < 50 || (!inp.autoSize && inp.hf >= inp.h - 50)) {
+        return makeErr(
+          'سمك الشفة (hf) غير منطقي',
+          'سمك الشفة hf يجب أن يكون 50 mm على الأقل وأصغر من العمق الكلي h بـ 50 mm على الأقل.',
+          'أدخل سمك بلاطة عملياً (مثلاً 100–200 mm) وتأكد أنه أقل من العمق الكلي h.'
+        );
+      }
+      if (inp.sectionType === 'isolated_t') {
+        if (!Number.isFinite(inp.bfActual) || inp.bfActual < 150) {
+          return makeErr(
+            'عرض الشفة (bf) غير صالح',
+            'في مقطع Isolated T يجب أن يكون عرض الشفة bf رقماً موجباً لا يقل عن 150 mm.',
+            'أدخل عرض شفة عملياً (مثلاً 600–1200 mm).'
+          );
+        }
+        if ((!inp.autoSize && inp.bfActual < inp.bw) || (inp.autoSize && inp.bwFixed !== undefined && inp.bfActual < inp.bwFixed)) {
+          return makeErr(
+            'عرض الشفة (bf) أصغر من عرض الجذع (bw)',
+            'في مقطع Isolated T يجب أن يكون عرض الشفة bf أكبر من أو مساوياً لعرض الجذع bw.',
+            'زِد قيمة bf لتكون أكبر من bw.'
+          );
+        }
+      } else {
+        if (ri.s1Mm !== undefined && (!Number.isFinite(ri.s1Mm) || ri.s1Mm < 0 || ri.s1Mm > 30000)) {
+          return makeErr(
+            'المسافة الصافية للشفة (s1) غير صالحة',
+            'المسافة الصافية s1 يجب أن تكون رقماً غير سالب بالمليمتر (0–30000 mm).',
+            'أدخل قيمة موجبة بالمليمتر (مثلاً 3000 mm).'
+          );
+        }
+        if (inp.sectionType === 't_beam' && ri.s2Mm !== undefined && (!Number.isFinite(ri.s2Mm) || ri.s2Mm < 0 || ri.s2Mm > 30000)) {
+          return makeErr(
+            'المسافة الصافية للشفة (s2) غير صالحة',
+            'المسافة الصافية s2 يجب أن تكون رقماً غير سالب بالمليمتر (0–30000 mm).',
+            'أدخل قيمة موجبة بالمليمتر (مثلاً 3000 mm).'
+          );
+        }
+      }
+    }
+
+    // Slab Load Transfer validation
+    if (inp.slabTransfer && inp.slabTransfer.enabled) {
+      if (!Number.isFinite(ri.slabS1) || ri.slabS1 <= 0 || ri.slabS1 > 25) {
+        return makeErr(
+          'عرض البلاطة المجاورة (S1) غير صالح',
+          'عند تفعيل نقل أحمال البلاطة يجب أن يكون S1 رقماً موجباً بالمتر (0.5–25 m).',
+          'أدخل عرض الفضاء المجاور S1 بالمتر (مثلاً 4 m).'
+        );
+      }
+      if (inp.slabTransfer.beamPosition === 'interior' && (!Number.isFinite(ri.slabS2) || ri.slabS2 <= 0 || ri.slabS2 > 25)) {
+        return makeErr(
+          'عرض البلاطة المجاورة (S2) غير صالح',
+          'للكمرة الداخلية يجب أن يكون S2 رقماً موجباً بالمتر (0.5–25 m).',
+          'أدخل عرض الفضاء المجاور S2 بالمتر (مثلاً 4 m).'
+        );
+      }
+      if ((ri.slabCant !== undefined && (!Number.isFinite(ri.slabCant) || ri.slabCant < 0 || ri.slabCant > 10)) ||
+          !Number.isFinite(ri.slabDL) || ri.slabDL < 0 ||
+          !Number.isFinite(ri.slabLL) || ri.slabLL < 0) {
+        return makeErr(
+          'قيم أحمال البلاطة أو البروز غير صالحة',
+          'أحمال البلاطة (DL / LL) وعرض البروز (Overhang) يجب أن تكون أرقاماً غير سالبة.',
+          'راجع قيم أحمال البلاطة بـ kN/m² وعرض البروز بالمتر.'
+        );
+      }
+    }
+
+    // Analysis Mode specific inputs validation
+    if (inp.mode === 'analysis') {
+      if (ri.anTensionCount !== undefined && (!Number.isFinite(ri.anTensionCount) || ri.anTensionCount < 1 || ri.anTensionCount > 30)) {
+        return makeErr(
+          'عدد قضبان الشد في وضع التحليل غير صالح',
+          'يجب أن يكون عدد قضبان الشد رقماً صحيحاً بين 1 و 30.',
+          'أدخل عدداً صحيحاً للقضبان (مثلاً 4).'
+        );
+      }
+      if (ri.anCompCount !== undefined && (!Number.isFinite(ri.anCompCount) || ri.anCompCount < 0 || ri.anCompCount > 30)) {
+        return makeErr(
+          'عدد قضبان الضغط في وضع التحليل غير صالح',
+          'يجب أن يكون عدد قضبان الضغط رقماً صحيحاً بين 0 و 30.',
+          'أدخل 0 في حال عدم وجود حديد ضغط، أو عدداً صحيحاً موجباً.'
+        );
+      }
+      if (ri.anAsManual !== undefined && (!Number.isFinite(ri.anAsManual) || ri.anAsManual <= 0)) {
+        return makeErr(
+          'المساحة اليدوية للحديد (As) غير صالحة',
+          'قيمة As اليدوية يجب أن تكون رقماً موجباً بـ mm².',
+          'أدخل مساحة موجبة أو اترك الحقل فارغاً ليتم حسابها من القضبان.'
+        );
+      }
+      const maxAnD = inp.h - inp.cover - inp.stirrupDia - 4;
+      if (ri.anDManual !== undefined && (!Number.isFinite(ri.anDManual) || ri.anDManual <= 0 || ri.anDManual > maxAnD)) {
+        return makeErr(
+          'العمق الفعال اليدوي (d) في وضع التحليل غير صالح',
+          'العمق d المُدخل (' + (Number.isFinite(ri.anDManual) ? C.roundTo(ri.anDManual, 1) + ' mm' : 'غير رقمي') + ') يجب أن يكون موجباً وأقل من الحد الفيزيائي للمقطع (' + C.roundTo(maxAnD, 1) + ' mm).',
+          'أدخل قيمة d أقل من ' + C.roundTo(maxAnD, 0) + ' mm أو اترك الخانة فارغة ليُحسب تلقائياً.'
+        );
+      }
+    }
+
+    // Span & Load Validation
+    if (inp.supportType === 'direct_moment') {
+      if (inp.mode === 'design' && (!Number.isFinite(ri.directMoment) || Math.abs(ri.directMoment) <= 0)) {
+        return makeErr(
+          'قيمة العزم المباشر (Mu) غير صالحة',
+          'يجب إدخال قيمة رقمية موجبة للعزم المصعّد Mu في وضع العزم المباشر.',
+          'أدخل العزم بـ kN·m (مثلاً 200 أو 307).'
+        );
+      }
+      if (ri.directVu !== undefined && (!Number.isFinite(ri.directVu) || ri.directVu < 0)) {
+        return makeErr(
+          'قيمة القص المباشر (Vu) غير صالحة',
+          'قوة القص Vu يجب أن تكون رقماً موجباً أو صفراً.',
+          'أدخل قيمة موجبة بـ kN أو اتركها 0.'
+        );
+      }
+    } else if (inp.supportType === 'continuous_aci') {
+      const spans = (inp.continuous && inp.continuous.spans) ? inp.continuous.spans : [];
+      for (let i = 0; i < spans.length; i++) {
+        const lnVal = C.parseArabicNumber(spans[i].ln, NaN);
+        const dlVal = hasText(spans[i].dl) ? C.parseArabicNumber(spans[i].dl, NaN) : 0;
+        const llVal = hasText(spans[i].ll) ? C.parseArabicNumber(spans[i].ll, NaN) : 0;
+        if (!Number.isFinite(lnVal) || lnVal <= 0 || lnVal > 35) {
+          return makeErr(
+            'طول الفضاء في الجسر المستمر غير صالح (Span ' + (i + 1) + ')',
+            'طول الفضاء يجب أن يكون رقماً موجباً منطقياً بين 0.5 و 35 متر.',
+            'راجع طول الفضاء S' + (i + 1) + ' وتأكد أنه بالمتر وليس بالمليمتر.'
+          );
+        }
+        if (!Number.isFinite(dlVal) || dlVal < 0 || !Number.isFinite(llVal) || llVal < 0) {
+          return makeErr(
+            'قيم الأحمال في الفضاء S' + (i + 1) + ' غير صالحة',
+            'الأحمال الميتة والحية يجب أن تكون أرقاماً غير سالبة.',
+            'أدخل قيماً موجبة أو صفراً لـ DL و LL بـ kN/m.'
+          );
+        }
+      }
+    } else {
+      if ((ri.spanPresent && !Number.isFinite(ri.spanMeters)) || inp.spanMeters <= 0 || inp.spanMeters > 35) {
+        return makeErr(
+          'طول الفضاء (L) خارج النطاق المنطقي',
+          'القيمة المُدخلة لطول الفضاء (' + (Number.isFinite(ri.spanMeters) ? C.roundTo(ri.spanMeters, 2) + ' m' : 'فارغة أو غير رقمية') + ') غير منطقية لجسر خرساني اعتيادي (0.5–35 m).',
+          'تأكد أن طول الفضاء مُدخل بالمتر (مثلاً 6 m وليس 6000 mm).'
+        );
+      }
+      if ((ri.dlPresent && !Number.isFinite(ri.dl)) || inp.dl < 0 || (ri.llPresent && !Number.isFinite(ri.ll)) || inp.ll < 0) {
+        return makeErr(
+          'قيم الأحمال (DL / LL) غير صالحة',
+          'الحمل الميت DL والحمل الحي LL يجب أن يكونا أرقاماً غير سالبة.',
+          'أدخل قيماً صحيحة بـ kN/m (مثلاً DL = 25 و LL = 10).'
+        );
+      }
+      if ((ri.loadFactorDL !== undefined && (!Number.isFinite(ri.loadFactorDL) || ri.loadFactorDL <= 0)) ||
+          (ri.loadFactorLL !== undefined && (!Number.isFinite(ri.loadFactorLL) || ri.loadFactorLL <= 0))) {
+        return makeErr(
+          'معاملات تصعيد الأحمال غير صالحة',
+          'معامل الحمل الميت ومعامل الحمل الحي يجب أن يكونا أرقاماً موجبة.',
+          'القيم القياسية في كود ACI 318-19 هي 1.2 للحمل الميت و 1.6 للحمل الحي.'
+        );
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Post-solve structural feasibility check for Design Mode (both Manual & Auto-Sizing).
+   * Catches extreme/unrealistic inputs and cases where neither Singly nor Doubly Reinforced
+   * can safely satisfy ACI 318-19 flexure, ductility, bar spacing/congestion, or web shear crushing.
+   */
+  function validateDesignFeasibility(solved, inp) {
+    if (!solved || !solved.valid) return solved;
+    if (inp.mode === 'analysis') return solved;
+
+    const sections = (solved.isContinuous && solved.designedSections && solved.designedSections.length)
+      ? solved.designedSections
+      : [solved.designResult];
+
+    // 1. Check impractical auto-sized dimensions from extreme loads/spans
+    if (inp.autoSize && (solved.bw > 1200 || solved.h > 2000)) {
+      return {
+        valid: false,
+        error: 'الأبعاد الناتجة تتجاوز الحدود العملية للجسور الخرسانية.',
+        errorTitle: 'الأحمال أو الفضاء المُدخل كبير جداً على جسر خرساني اعتيادي',
+        errorReason: 'الأحمال أو العزم الناتج يتطلب أبعاداً غير عملية لجسر خرساني اعتيادي (وصل التقدير إلى ' + C.roundTo(solved.bw, 0) + ' × ' + C.roundTo(solved.h, 0) + ' mm).',
+        errorSolution: 'تحقق من وحدات الأحمال (يجب أن تكون بـ kN/m وليس N/m) ومن طول الفضاء (بالمتر)، أو قلّل الفضاء بإضافة مسند وسطي.',
+      };
+    }
+
+    for (let i = 0; i < sections.length; i++) {
+      const dr = sections[i];
+      if (!dr || !dr.valid) {
+        return {
+          valid: false,
+          error: (dr && dr.error) || 'فشل تصميم المقطع.',
+          errorTitle: 'تعذّر تصميم المقطع بالأبعاد والأحمال المُدخلة',
+          errorReason: (dr && dr.error) ? dr.error : 'الأبعاد غير كافية لتحقيق شروط الكود لا بالتسليح الأحادي ولا الثنائي.',
+          errorSolution: inp.autoSize
+            ? 'ارفع أو أزل قيود الأبعاد (h_max أو bw الثابت)، أو راجع قيم الأحمال والفضاء.'
+            : 'زِد العمق الكلي h أو العرض bw، أو فعّل خيار التحديد التلقائي للأبعاد (Auto-Sizing).',
+        };
+      }
+
+      const secPrefix = solved.isContinuous && dr.sectionLabel ? (dr.sectionLabel + ': ') : '';
+      const mu = dr.muApplied || 0;
+      const phiMn = dr.phiMn || 0;
+      const sh = dr.shearResult;
+      const tb = dr.tensionBars;
+      const cb = dr.compressionBars;
+      const hasSinglyOverflow = (dr.warnings || []).some(function (w) { return w.indexOf('ρ > ρ_max') !== -1; });
+      const hasShallowNA = (dr.warnings || []).some(function (w) { return w.indexOf('c1 ≤ d\'') !== -1; });
+
+      // 2. Forced Singly mode exceeded rho_max
+      if (inp.reinforcementMode === 'singly' && (hasSinglyOverflow || (mu > 0 && phiMn < mu - 1e-3))) {
+        return {
+          valid: false,
+          error: 'المقطع لا يكفي للتسليح الأحادي (ρ > ρ_max).',
+          errorTitle: 'فشل التصميم بالتسليح الأحادي (Singly Reinforced)',
+          errorReason: secPrefix + 'العزم المصعّد (Mu = ' + C.roundTo(mu, 1) + ' kN·m) أكبر من أقصى مقاومة للمقطع بالتسليح الأحادي (φMn = ' + C.roundTo(phiMn, 1) + ' kN·m)، وتتجاوز نسبة التسليح الحد الأقصى المسموح (ρ_max = ' + C.roundTo(dr.rhoMax, 5) + ').',
+          errorSolution: 'غيّر نظام التسليح إلى "ثنائي (Doubly)" أو "تلقائي (Auto)"، أو زِد العمق الكلي h / العرض bw، أو ارفع مقاومة الخرسانة f\'c (ضمن 17–55 MPa).',
+        };
+      }
+
+      // 2b. User forced Doubly Reinforced on a small moment where c1 <= d'
+      if (inp.reinforcementMode === 'doubly' && hasShallowNA) {
+        return {
+          valid: false,
+          error: 'العزم صغير ولا يحتاج تسليحاً ثنائياً (c1 ≤ d\').',
+          errorTitle: 'العزم صغير — التسليح الثنائي (Doubly) غير فعّال لهذا المقطع',
+          errorReason: secPrefix + 'العزم المصعّد (Mu = ' + C.roundTo(mu, 1) + ' kN·m) صغير مقارنة بأبعاد المقطع، مما يجعل عمق محور التعادل (c1) أقل من عمق حديد الضغط (d\') فيفقد حديد الضغط فعاليته.',
+          errorSolution: 'حوّل نظام التسليح إلى "تلقائي (Auto)" أو "أحادي (Singly)" — فالمقطع يتحمل هذا العزم بتسليح أحادي بسهولة.',
+        };
+      }
+
+      // 3. Neither Singly nor Doubly satisfies flexural strength or ductility
+      if ((mu > 0 && phiMn < mu - 1e-3) || dr.phiZone === 'compression' || hasShallowNA) {
+        const extraCause = hasShallowNA
+          ? 'عمق محور التعادل (c1) أقل من عمق حديد الضغط (d\') مما يجعل التسليح الثنائي غير فعّال.'
+          : (dr.phiZone === 'compression'
+            ? 'المقطع مسيطر عليه بالانضغاط (Compression-Controlled، εt ≤ εty) وهو غير مسموح للتصميم المرن.'
+            : ('العزم المصعّد (Mu = ' + C.roundTo(mu, 1) + ' kN·m) يتجاوز أقصى مقاومة أمكن تحقيقها للمقطع حتى مع التسليح الثنائي (φMn = ' + C.roundTo(phiMn, 1) + ' kN·m).'));
+        return {
+          valid: false,
+          error: 'المقطع غير قابل للتصميم لا أحادياً ولا ثنائياً.',
+          errorTitle: 'فشل التصميم الإنشائي — لا ينطبق لا Singly ولا Doubly',
+          errorReason: secPrefix + extraCause,
+          errorSolution: inp.autoSize
+            ? 'راجع قيم الأحمال والفضاء (قد يكون الرقم كبيراً جداً)، أو أزل/ارفع قيد أقصى عمق (h_max) أو العرض الثابت (bw)، أو ارفع مقاومة الخرسانة f\'c (ضمن 17–55 MPa).'
+            : 'زِد العمق الكلي h أو العرض bw، أو ارفع مقاومة الخرسانة f\'c (ضمن 17–55 MPa)، أو فعّل خيار التحديد التلقائي للأبعاد (Auto-Sizing).',
+        };
+      }
+
+      // 4. Severe bar congestion (cannot fit within 2 layers with ACI 25.2 minimum clear spacing)
+      if ((tb && (!tb.spacingOk || !tb.fitsInTwoLayers)) || (cb && !cb.isHangerOnly && !cb.spacingOk)) {
+        const sVal = tb ? C.roundTo(tb.clearSpacing, 1) : 0;
+        const sMin = tb ? C.roundTo(tb.minClearSpacing, 1) : 25;
+        return {
+          valid: false,
+          error: 'تكدّس حديد التسليح — لا تكفي المساحة لترتيب القضبان.',
+          errorTitle: 'فشل تفصيل الحديد (تكدّس القضبان — ACI 25.2)',
+          errorReason: secPrefix + 'مساحة الحديد المطلوبة كبيرة جداً مقارنة بعرض الجذع (bw = ' + C.roundTo(solved.bw, 0) + ' mm) ولا يمكن ترتيب القضبان (' + (tb ? tb.count + tb.bar.id : '') + ') ضمن طبقتين بالتباعد الصافي النظامي (المسافة الصافية s = ' + sVal + ' mm < الحد الأدنى ' + sMin + ' mm).',
+          errorSolution: inp.autoSize
+            ? 'أزل/ارفع قيد العرض الثابت (bw) أو أقصى عمق (h_max)، أو اترك القطر المفضّل على Auto، أو قلّل الأحمال.'
+            : 'زِد عرض الجذع bw أو العمق الكلي h لتقليل عدد القضبان، أو اختر قطراً أكبر (مثل Ø25 أو Ø28 أو Ø32).',
+        };
+      }
+
+      // 5. Shear concrete web crushing (Vs > Vs,max per ACI 22.5.1.2)
+      if (sh && !sh.sectionAdequate) {
+        return {
+          valid: false,
+          error: 'تجاوز حد سحق الخرسانة بالقص (ACI 22.5.1.2).',
+          errorTitle: 'فشل تصميم القص — تجاوز حد مقاومة الجذع (Vs > Vs,max)',
+          errorReason: secPrefix + 'قوة القص المصعّدة (Vu = ' + C.roundTo(sh.vu, 1) + ' kN) تتطلب Vs = ' + C.roundTo(sh.vsRequired, 1) + ' kN وهو أعلى من الحد الأقصى المسموح لمنع سحق الخرسانة قطرياً (Vs,max = ' + C.roundTo(sh.vsMax, 1) + ' kN حسب ACI 22.5.1.2).',
+          errorSolution: inp.autoSize
+            ? 'أزل/ارفع قيود الأبعاد (h_max أو bw الثابت)، أو ارفع مقاومة الخرسانة f\'c (ضمن 17–55 MPa)، أو تحقق من قيمة الأحمال والقص.'
+            : 'يجب زيادة أبعاد المقطع (bw أو h) أو رفع مقاومة الخرسانة f\'c (ضمن 17–55 MPa)؛ زيادة الأتاري وحدها لا تكفي.',
+        };
+      }
+    }
+
+    return solved;
+  }
+
+  /**
    * Main Unified Entry Point
    */
   function solveBeam(rawInput) {
     const inp = normalizeInput(rawInput || {});
+
+    const preErr = validatePreSolveInputs(inp);
+    if (preErr) return preErr;
 
     if (inp.mode === 'analysis') {
       return solveAnalysisMode(inp);
     }
 
     if (inp.supportType === 'continuous_aci') {
-      return solveContinuous(inp);
+      return validateDesignFeasibility(solveContinuous(inp), inp);
     }
 
     // SINGLE SPAN / DIRECT MOMENT DESIGN MODE
@@ -5318,10 +6096,12 @@ html, body {
       warnings.unshift('Deflection Notice (ACI 9.3.1.1): h (' + h + ' mm) < h_min (' + C.roundTo(loadResult.deflection.hMin, 1) + ' mm).');
     }
 
-    return {
+    return validateDesignFeasibility({
       valid: true,
       mode: 'design',
       beamTag: inp.beamTag,
+      fcSpecimenType: inp.fcSpecimenType,
+      fcInput: inp.fcInput,
       fc: inp.fc,
       fy: inp.fy,
       isContinuous: false,
@@ -5337,7 +6117,7 @@ html, body {
       loadResult: loadResult,
       designResult: designDetail,
       warnings: warnings,
-    };
+    }, inp);
   }
 
   /**
@@ -5903,8 +6683,8 @@ html, body {
     const svgW = 740;
     const svgH = 540;
 
-    const secAreaLeft = 105;
-    const secAreaWidth = 440;
+    const secAreaLeft = 92;
+    const secAreaWidth = 390;
     const secAreaTop = 92;
     const secAreaHeight = 320;
 
@@ -6038,7 +6818,7 @@ html, body {
 
     const dY = isNeg ? (geom.h - geom.dActual) : geom.dActual;
     const dStartY = isNeg ? geom.h : 0;
-    const dDimX = Math.max(tx(geom.totalWidth), tx(geom.webRight)) + 44;
+    const dDimX = Math.max(tx(geom.totalWidth), tx(geom.webRight)) + 114;
     if (Math.abs(dY - dStartY) > 10) {
       parts.push('<line x1="' + dDimX + '" y1="' + ty(dStartY) + '" x2="' + dDimX + '" y2="' + ty(dY) + '" stroke="#0369a1" stroke-width="1.1" marker-start="url(#arrow-comp)" marker-end="url(#arrow-comp)" />');
       parts.push('<text x="' + (dDimX + 10) + '" y="' + ((ty(dStartY) + ty(dY)) / 2 + 4) + '" text-anchor="start" ' + dimFont + ' fill="#0369a1">d = ' + C.roundTo(geom.dActual, 1) + ' mm</text>');
@@ -6242,27 +7022,39 @@ html, body {
       parts.push('<text x="' + (endX + (align === 'start' ? 6 : -6)) + '" y="' + (elbowY + 4) + '" text-anchor="' + align + '" ' + calloutFont + '>' + label + '</text>');
     };
 
-    // Right side callouts: Top Steel + Stirrups + Bottom Steel
+    // Right side callouts: Top Steel + Stirrups + Bottom Steel with guaranteed vertical spacing
     const rightAnchorX = Math.max(tx(geom.totalWidth), tx(geom.webRight)) + 28;
     const rightEndX = rightAnchorX + 24;
+    const minLeaderGap = 24;
+
+    let topElbowY = topBars.length
+      ? (geom.sectionType !== 'rectangular' && !isNeg
+        ? Math.max(ty(0) + 14, ty(topBars[topBars.length - 1].cy))
+        : (ty(topBars[topBars.length - 1].cy) - 10))
+      : (ty(0) + 14);
+    let stirrupElbowY = stY + stH * 0.48;
+    let botElbowY = botBars.length ? (ty(botBars[botBars.length - 1].cy) + 6) : (ty(geom.h) - 10);
+
+    // Prevent vertical overlap on wide shallow sections
+    if (stirrupElbowY < topElbowY + minLeaderGap) {
+      stirrupElbowY = topElbowY + minLeaderGap;
+    }
+    if (botElbowY < stirrupElbowY + minLeaderGap) {
+      botElbowY = stirrupElbowY + minLeaderGap;
+    }
+
     if (topBars.length) {
       const tb = topBars[topBars.length - 1];
-      const topElbowY = geom.sectionType !== 'rectangular' && !isNeg
-        ? Math.max(ty(0) + 14, ty(tb.cy))
-        : (ty(tb.cy) - 10);
       drawLeader(tx(tb.cx), ty(tb.cy), rightAnchorX, topElbowY, rightEndX, topBarLabel, 'start');
     }
 
-    // Stirrups leader pointing to right vertical leg at mid-height
-    const stirrupMidY = stY + stH * 0.45;
     const stirrupLegX = stX + stW;
     const shText = 'STIRRUPS: ' + (geom.shearCallout || ('Ø' + geom.stirrupDia));
-    drawLeader(stirrupLegX, stirrupMidY, rightAnchorX, stirrupMidY, rightEndX, shText, 'start');
+    drawLeader(stirrupLegX, stY + stH * 0.45, rightAnchorX, stirrupElbowY, rightEndX, shText, 'start');
 
-    // Bottom Steel leader pointing to bottom-right bar
     if (botBars.length) {
       const bb = botBars[botBars.length - 1];
-      drawLeader(tx(bb.cx), ty(bb.cy), rightAnchorX, ty(bb.cy) + 6, rightEndX, botBarLabel, 'start');
+      drawLeader(tx(bb.cx), ty(bb.cy), rightAnchorX, botElbowY, rightEndX, botBarLabel, 'start');
     }
 
     // Left side callout: Concrete Cover pointing to bottom-left clear cover zone
@@ -6684,11 +7476,37 @@ html, body {
   }
 
   function updateLiveLimitsBar() {
-    const fc = C.parseArabicNumber(el('fc').value, 28);
+    const specType = el('fcSpecimenType') ? el('fcSpecimenType').value : 'cylinder';
+    const isCube = specType === 'cube';
+    const fcRaw = C.parseArabicNumber(el('fc').value, NaN);
+    const fc = Number.isFinite(fcRaw) ? (isCube ? fcRaw * 0.8 : fcRaw) : NaN;
     const fy = C.parseArabicNumber(el('fy').value, 420);
     const es = C.parseArabicNumber(el('es').value, 200000);
     const epsCu = C.parseArabicNumber(el('epsCu').value, 0.003);
-    if (fc <= 0 || fy <= 0 || es <= 0 || epsCu <= 0) return;
+
+    const lbl = el('fcLabel');
+    const hint = el('fcConvHint');
+    if (lbl) {
+      lbl.textContent = isCube ? 'مقاومة المكعب fcu (MPa)' : 'مقاومة الأسطوانة f\'c (MPa)';
+    }
+    if (hint) {
+      const outOfRange = !Number.isFinite(fc) || fc < 17 - 1e-6 || fc > 55 + 1e-6;
+      hint.classList.toggle('invalid', outOfRange);
+      if (!Number.isFinite(fcRaw) || fcRaw <= 0) {
+        hint.textContent = isCube ? 'النطاق المسموح للمكعب: 21.25–68.75 MPa' : 'النطاق المسموح للأسطوانة: 17–55 MPa';
+      } else if (isCube) {
+        hint.textContent = 'المكافئ الأسطواني f\'c = ' + C.roundTo(fc, 2) + ' MPa (المسموح: 17–55 MPa)';
+      } else {
+        hint.textContent = 'يعادل مكعب fcu = ' + C.roundTo(fc / 0.8, 2) + ' MPa (المسموح: 17–55 MPa)';
+      }
+    }
+
+    if (!Number.isFinite(fc) || fc < 17 - 1e-6 || fc > 55 + 1e-6) {
+      el('liveLimitsBar').innerHTML =
+        '<span class="limits-chip" style="color:#dc2626;border-color:#fca5a5;">f\'c خارج النطاق الإنشائي (17–55 MPa)</span>';
+      return;
+    }
+    if (fy <= 0 || es <= 0 || epsCu <= 0) return;
 
     const beta1 = C.calcBeta1(fc);
     const rhoMin = C.calcRhoMin(fc, fy);
@@ -6697,6 +7515,7 @@ html, body {
     const epsTy = fy / es;
 
     el('liveLimitsBar').innerHTML =
+      '<span class="limits-chip">f\'c = ' + C.roundTo(fc, 1) + ' MPa</span>' +
       '<span class="limits-chip">β₁ = ' + C.roundTo(beta1, 3) + '</span>' +
       '<span class="limits-chip">ρ_min = ' + C.roundTo(rhoMin, 5) + '</span>' +
       '<span class="limits-chip">ρ_max = ' + C.roundTo(rhoMax, 5) + '</span>' +
@@ -6820,7 +7639,10 @@ html, body {
     el('tabPanelBmd').classList.toggle('hidden', state.activeDetailTab !== 'bmd');
     el('tabPanelSfd').classList.toggle('hidden', state.activeDetailTab !== 'sfd');
 
-    el('btnRun').textContent = isDesign ? 'Calculate & Design (Enter)' : 'Analyze Section (Enter)';
+    if (el('exteriorEndWrap')) {
+      el('exteriorEndWrap').classList.toggle('hidden', supType !== 'one_end_continuous');
+    }
+    el('btnRun').textContent = isDesign ? 'احسب وصمّم المقطع (Enter)' : 'حلّل المقطع القائم (Enter)';
     updateLiveLimitsBar();
   }
 
@@ -6834,9 +7656,11 @@ html, body {
       projectTitle: el('cadProjectTitle').value,
       sectionType: secType,
       supportType: supType,
+      exteriorEndType: el('exteriorEndType') ? el('exteriorEndType').value : 'column',
       reinforcementMode: el('reinforcementMode').value,
       autoSize: state.mode === 'design' && el('autoSizeToggle').checked,
       hMax: el('hMax').value,
+      bwMax: el('bwMax') ? el('bwMax').value : '',
       bwFixed: el('bwFixed').value,
       momentSign: state.momentSign,
       spanMeters: el('spanMeters').value,
@@ -6857,6 +7681,7 @@ html, body {
       slabIncludesWebWidth: el('slabIncludesWebWidth').checked,
       directMoment: el('directMoment').value,
       directVu: el('directVu').value,
+      fcSpecimenType: el('fcSpecimenType') ? el('fcSpecimenType').value : 'cylinder',
       fc: el('fc').value,
       fy: el('fy').value,
       es: el('es').value,
@@ -6931,6 +7756,7 @@ html, body {
     el('supportType').value = d.supportType || 'simply_supported';
     el('autoSizeToggle').checked = Boolean(d.autoSize);
     el('hMax').value = d.hMax !== undefined ? d.hMax : '';
+    if (el('bwMax')) el('bwMax').value = d.bwMax !== undefined ? d.bwMax : '';
     el('bwFixed').value = d.bwFixed !== undefined ? d.bwFixed : '';
     el('spanMeters').value = d.spanMeters !== undefined ? d.spanMeters : 6;
     el('bw').value = d.bw !== undefined ? d.bw : 300;
@@ -6949,6 +7775,7 @@ html, body {
     el('slabIncludesWebWidth').checked = Boolean(d.slabIncludesWebWidth);
     el('directMoment').value = d.directMoment !== undefined ? d.directMoment : 307;
     el('directVu').value = d.directVu !== undefined ? d.directVu : 0;
+    if (el('fcSpecimenType')) el('fcSpecimenType').value = d.fcSpecimenType || 'cylinder';
     el('fc').value = d.fc !== undefined ? d.fc : 28;
     el('fy').value = d.fy !== undefined ? d.fy : 420;
     el('es').value = d.es !== undefined ? d.es : 200000;
@@ -6960,24 +7787,23 @@ html, body {
     el('aggSize').value = d.aggSize !== undefined ? d.aggSize : 19;
     el('layerClearSpacing').value = d.layerClearSpacing !== undefined ? d.layerClearSpacing : 25;
 
-    if (d.barStandard) {
-      el('barStandard').value = d.barStandard;
-      populateBarSelectors();
+    if (el('exteriorEndType')) {
+      el('exteriorEndType').value = d.exteriorEndType || 'column';
     }
-    if (d.preferredBarDia) {
-      el('preferredBarDia').value = d.preferredBarDia;
-    }
+    el('barStandard').value = d.barStandard || 'metric';
+    populateBarSelectors();
+    el('preferredBarDia').value = d.preferredBarDia ? String(d.preferredBarDia) : '';
 
     const slab = d.slabTransfer || {};
     el('slabEnableToggle').checked = Boolean(slab.enabled);
-    if (slab.mode) el('slabMode').value = slab.mode;
-    if (slab.beamPosition) el('slabBeamPos').value = slab.beamPosition;
-    if (slab.beamDirection) el('slabBeamDir').value = slab.beamDirection;
-    if (slab.s1 !== undefined) el('slabS1').value = slab.s1;
-    if (slab.s2 !== undefined) el('slabS2').value = slab.s2;
-    if (slab.cantileverWidth !== undefined) el('slabCant').value = slab.cantileverWidth;
-    if (slab.slabDL !== undefined) el('slabDL').value = slab.slabDL;
-    if (slab.slabLL !== undefined) el('slabLL').value = slab.slabLL;
+    el('slabMode').value = slab.mode || 'auto';
+    el('slabBeamPos').value = slab.beamPosition || 'interior';
+    el('slabBeamDir').value = slab.beamDirection || 'long';
+    el('slabS1').value = slab.s1 !== undefined ? slab.s1 : 4;
+    el('slabS2').value = slab.s2 !== undefined ? slab.s2 : 4;
+    el('slabCant').value = slab.cantileverWidth !== undefined ? slab.cantileverWidth : 0;
+    el('slabDL').value = slab.slabDL !== undefined ? slab.slabDL : 5;
+    el('slabLL').value = slab.slabLL !== undefined ? slab.slabLL : 3;
     el('slabIncludeSelf').checked = Boolean(slab.includeSlabSelfWeight);
 
     if (d.continuous) {
@@ -6997,15 +7823,14 @@ html, body {
       renderContinuousSpansEditor();
     }
 
-    if (d.analysis) {
-      el('anTensionCount').value = d.analysis.tensionBarCount || 4;
-      if (d.analysis.tensionBarDia) el('anTensionDia').value = d.analysis.tensionBarDia;
-      el('anTensionLayers').value = d.analysis.tensionLayers || '0';
-      el('anCompCount').value = d.analysis.compBarCount || 0;
-      if (d.analysis.compBarDia) el('anCompDia').value = d.analysis.compBarDia;
-      el('anAsManual').value = d.analysis.asManual || '';
-      el('anDManual').value = d.analysis.dManual || '';
-    }
+    const an = d.analysis || {};
+    el('anTensionCount').value = an.tensionBarCount !== undefined ? an.tensionBarCount : 4;
+    if (an.tensionBarDia) el('anTensionDia').value = an.tensionBarDia;
+    el('anTensionLayers').value = an.tensionLayers !== undefined ? String(an.tensionLayers) : '0';
+    el('anCompCount').value = an.compBarCount !== undefined ? an.compBarCount : 0;
+    if (an.compBarDia) el('anCompDia').value = an.compBarDia;
+    el('anAsManual').value = an.asManual !== undefined ? an.asManual : '';
+    el('anDManual').value = an.dManual !== undefined ? an.dManual : '';
   }
 
   function loadStateFromStorage() {
@@ -7026,11 +7851,41 @@ html, body {
   }
 
   function renderResults(solved, rawInput) {
+    const errPanel = el('errorPanel');
+    const cadWrap = el('cadContainer');
+    const kpiGrid = el('kpiGrid');
+    const contPanelEl = el('continuousOutputPanel');
+    const drawerEl = el('extraDetailsDrawer');
+
     if (!solved || !solved.valid) {
-      el('statusBar').innerHTML = '<span class="badge badge-danger">Error: ' + (solved && solved.error ? solved.error : 'Invalid Inputs') + '</span>';
-      el('kpiGrid').innerHTML = '';
+      const title = (solved && solved.errorTitle) ? solved.errorTitle : 'تعذّر إتمام التصميم';
+      const reason = (solved && solved.errorReason) ? solved.errorReason : ((solved && solved.error) ? solved.error : 'المدخلات غير صالحة أو خارج الحدود النظامية.');
+      const solution = (solved && solved.errorSolution) ? solved.errorSolution : 'راجع قيم المدخلات والأبعاد والمقاومات وأعد المحاولة.';
+
+      el('statusBar').innerHTML = '<span class="badge badge-danger">خطأ تصميمي ✗ — ' + title + '</span>';
+      el('alertList').innerHTML = '';
+      el('alertList').classList.add('hidden');
+
+      if (errPanel) {
+        errPanel.innerHTML =
+          '<div class="error-panel-title">⛔ ' + title + '</div>' +
+          '<div class="error-panel-block"><span class="error-panel-label">سبب المشكلة:</span>' + reason + '</div>' +
+          '<div class="error-panel-block solution"><span class="error-panel-label">الحل المقترح:</span>' + solution + '</div>';
+        errPanel.classList.remove('hidden');
+      }
+      if (cadWrap) cadWrap.innerHTML = '';
+      if (cadWrap) cadWrap.classList.add('hidden');
+      if (kpiGrid) kpiGrid.innerHTML = '';
+      if (contPanelEl) contPanelEl.classList.add('hidden');
+      if (drawerEl) drawerEl.classList.add('hidden');
       return;
     }
+
+    if (errPanel) {
+      errPanel.innerHTML = '';
+      errPanel.classList.add('hidden');
+    }
+    if (cadWrap) cadWrap.classList.remove('hidden');
 
     const dr = solved.designResult;
     const lr = solved.loadResult;
@@ -7367,7 +8222,7 @@ html, body {
       runCalculation();
     });
 
-    ['sectionType', 'reinforcementMode', 'autoSizeToggle', 'slabEnableToggle', 'slabBeamPos', 'slabMode', 'slabBeamDir', 'dlIncludesSelfWeight', 'slabIncludesWebWidth', 'contLeftEnd', 'contRightEnd', 'preferredBarDia', 'anTensionDia', 'anTensionLayers', 'anCompDia'].forEach(function (id) {
+    ['sectionType', 'reinforcementMode', 'autoSizeToggle', 'exteriorEndType', 'slabEnableToggle', 'slabBeamPos', 'slabMode', 'slabBeamDir', 'dlIncludesSelfWeight', 'slabIncludesWebWidth', 'contLeftEnd', 'contRightEnd', 'preferredBarDia', 'anTensionDia', 'anTensionLayers', 'anCompDia'].forEach(function (id) {
       const node = el(id);
       if (node) {
         node.addEventListener('change', function () {
@@ -7376,6 +8231,21 @@ html, body {
         });
       }
     });
+
+    if (el('fcSpecimenType')) {
+      el('fcSpecimenType').addEventListener('change', function () {
+        const curVal = C.parseArabicNumber(el('fc').value, NaN);
+        if (Number.isFinite(curVal) && curVal > 0) {
+          if (this.value === 'cube') {
+            el('fc').value = String(C.roundTo(curVal / 0.8, 2));
+          } else {
+            el('fc').value = String(C.roundTo(curVal * 0.8, 2));
+          }
+        }
+        updateLiveLimitsBar();
+        runCalculation();
+      });
+    }
 
     el('barStandard').addEventListener('change', function () {
       populateBarSelectors();
@@ -7531,7 +8401,7 @@ html, body {
 </script>
 
 
-<!-- === Android 15 Native Print & Download Bridge === -->
+<!-- === Android 15 Native Print & Download Bridge (Safe no-op on Web & Windows) === -->
 <script>
 (function () {
   'use strict';
