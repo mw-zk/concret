@@ -15,7 +15,7 @@
    ===================================================================== */
 
 :root {
-  /* Institutional & Engineering Palette */
+  /* Institutional & Engineering Palette — Light Mode */
   --qgu-navy: #16324f;
   --qgu-navy-mid: #214969;
   --qgu-navy-light: #2d5d84;
@@ -23,10 +23,20 @@
   --qgu-sage-dark: #4f7742;
   --qgu-sage-soft: #eef5ea;
 
+  --header-bg: linear-gradient(135deg, #10263d 0%, #16324f 52%, #214969 100%);
+  --header-shadow: 0 6px 24px rgba(16, 38, 61, 0.24);
+  --brand-accent: #16324f;
+  --brand-accent-mid: #214969;
+  --on-brand: #ffffff;
+  --accent-title: #16324f;
+
   --bg-page: #f3f6fa;
   --bg-card: #ffffff;
   --bg-subtle: #f8fafc;
   --bg-input: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-limits: #f0f5fa;
+  --border-limits: #d2e0ed;
 
   --border: #cbd5e1;
   --border-soft: #e2e8f0;
@@ -40,12 +50,30 @@
   --primary-dark: #0369a1;
   --primary-soft: #e0f2fe;
 
+  --info-bg: #e8f1f8;
+  --info-fg: #16324f;
+  --info-border: #c2d8ea;
+
+  --sage-bg: #eef5ea;
+  --sage-fg: #4f7742;
+  --sage-border: #c8dfb9;
+
   --danger: #dc2626;
   --danger-soft: #fef2f2;
+  --danger-fg: #991b1b;
+  --danger-border: #fecaca;
   --success: #059669;
   --success-soft: #ecfdf5;
+  --success-fg: #047857;
+  --success-border: #a7f3d0;
   --warning: #b45309;
   --warning-soft: #fffbeb;
+  --warning-fg: #92400e;
+  --warning-border: #fde68a;
+  --box-bg: #ffffff;
+  --sol-bg: #f0f9ff;
+  --sol-border: #bae6fd;
+  --sol-fg: #0369a1;
 
   --radius-sm: 8px;
   --radius: 14px;
@@ -59,6 +87,130 @@
   --font-mono: 'Cascadia Code', 'JetBrains Mono', 'Consolas', ui-monospace, monospace;
 }
 
+
+html[data-theme="dark"] {
+  --qgu-navy: #8bb174;
+  --qgu-navy-mid: #476d42;
+  --qgu-navy-light: #5a8554;
+  --qgu-sage: #8bb174;
+  --qgu-sage-dark: #b6d1a6;
+  --qgu-sage-soft: #1b281e;
+
+  --header-bg: linear-gradient(135deg, #111c17 0%, #17261f 52%, #1f332a 100%);
+  --header-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --brand-accent: #476d42;
+  --brand-accent-mid: #395935;
+  --on-brand: #f2f6f3;
+  --accent-title: #b7ceaa;
+
+  --bg-page: #111416;
+  --bg-card: #181d20;
+  --bg-subtle: #20262a;
+  --bg-input: #14191c;
+  --bg-hover: #272f35;
+  --bg-limits: #1a221d;
+  --border-limits: #314237;
+
+  --border: #343e46;
+  --border-soft: #262e34;
+  --border-focus: #8bb174;
+
+  --text-main: #e5ebe7;
+  --text-secondary: #b6c2bc;
+  --text-muted: #84928b;
+
+  --primary: #8bb174;
+  --primary-dark: #b7ceaa;
+  --primary-soft: #1d262c;
+
+  --info-bg: #1d262c;
+  --info-fg: #b9c8d4;
+  --info-border: #344450;
+
+  --sage-bg: #1b281e;
+  --sage-fg: #b6d1a6;
+  --sage-border: #344e39;
+
+  --danger: #d48b92;
+  --danger-soft: #2b1a1d;
+  --danger-fg: #dfa1a7;
+  --danger-border: #5b333a;
+  --success: #91bf9f;
+  --success-soft: #182920;
+  --success-fg: #91bf9f;
+  --success-border: #2f523e;
+  --warning: #d4b57e;
+  --warning-soft: #292217;
+  --warning-fg: #d4b57e;
+  --warning-border: #544327;
+  --box-bg: #14181b;
+  --sol-bg: #18231c;
+  --sol-border: #344e39;
+  --sol-fg: #9cc484;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --qgu-navy: #8bb174;
+    --qgu-navy-mid: #476d42;
+    --qgu-navy-light: #5a8554;
+    --qgu-sage: #8bb174;
+    --qgu-sage-dark: #b6d1a6;
+    --qgu-sage-soft: #1b281e;
+
+    --header-bg: linear-gradient(135deg, #111c17 0%, #17261f 52%, #1f332a 100%);
+    --header-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    --brand-accent: #476d42;
+    --brand-accent-mid: #395935;
+    --on-brand: #f2f6f3;
+    --accent-title: #b7ceaa;
+
+    --bg-page: #111416;
+    --bg-card: #181d20;
+    --bg-subtle: #20262a;
+    --bg-input: #14191c;
+    --bg-hover: #272f35;
+    --bg-limits: #1a221d;
+    --border-limits: #314237;
+
+    --border: #343e46;
+    --border-soft: #262e34;
+    --border-focus: #8bb174;
+
+    --text-main: #e5ebe7;
+    --text-secondary: #b6c2bc;
+    --text-muted: #84928b;
+
+    --primary: #8bb174;
+    --primary-dark: #b7ceaa;
+    --primary-soft: #1d262c;
+
+    --info-bg: #1d262c;
+    --info-fg: #b9c8d4;
+    --info-border: #344450;
+
+    --sage-bg: #1b281e;
+    --sage-fg: #b6d1a6;
+    --sage-border: #344e39;
+
+    --danger: #d48b92;
+    --danger-soft: #2b1a1d;
+    --danger-fg: #dfa1a7;
+    --danger-border: #5b333a;
+    --success: #91bf9f;
+    --success-soft: #182920;
+    --success-fg: #91bf9f;
+    --success-border: #2f523e;
+    --warning: #d4b57e;
+    --warning-soft: #292217;
+    --warning-fg: #d4b57e;
+    --warning-border: #544327;
+    --box-bg: #14181b;
+    --sol-bg: #18231c;
+    --sol-border: #344e39;
+    --sol-fg: #9cc484;
+  }
+}
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -94,12 +246,12 @@ html, body {
    FORMAL UNIVERSITY HEADER
    ===================================================================== */
 .app-header {
-  background: linear-gradient(135deg, #10263d 0%, var(--qgu-navy) 52%, var(--qgu-navy-mid) 100%);
+  background: var(--header-bg);
   color: #ffffff;
   position: sticky;
   top: 0;
   z-index: 60;
-  box-shadow: 0 6px 24px rgba(16, 38, 61, 0.24);
+  box-shadow: var(--header-shadow);
   border-bottom: 3px solid var(--qgu-sage);
 }
 
@@ -252,9 +404,9 @@ html, body {
 }
 
 .seg-btn.active {
-  background: #ffffff;
-  color: var(--qgu-navy);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  background: var(--brand-accent);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
 .seg-group.light .seg-btn.active {
@@ -287,7 +439,7 @@ html, body {
 
 .header-select option {
   color: var(--text-main);
-  background: #ffffff;
+  background: var(--bg-card);
 }
 
 .btn-outline-light:hover, .header-select:hover {
@@ -312,7 +464,7 @@ html, body {
    ===================================================================== */
 .mobile-nav-bar {
   display: none;
-  background: #ffffff;
+  background: var(--bg-card);
   border-bottom: 1px solid var(--border-soft);
   padding: 8px 14px;
   position: sticky;
@@ -338,7 +490,7 @@ html, body {
   border-radius: 9px;
   border: 1px solid var(--border);
   background: var(--bg-subtle);
-  color: var(--qgu-navy);
+  color: var(--accent-title);
   font-family: inherit;
   font-size: 0.86rem;
   font-weight: 700;
@@ -347,9 +499,9 @@ html, body {
 }
 
 .mobile-nav-btn.primary {
-  background: var(--qgu-navy);
-  color: #ffffff;
-  border-color: var(--qgu-navy);
+  background: var(--brand-accent);
+  color: var(--on-brand);
+  border-color: var(--brand-accent);
 }
 
 /* =====================================================================
@@ -391,12 +543,12 @@ html, body {
   margin: 0 0 14px;
   font-size: 0.98rem;
   font-weight: 700;
-  color: var(--qgu-navy);
+  color: var(--accent-title);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  border-bottom: 1.5px solid #edf2f7;
+  border-bottom: 1.5px solid var(--border-soft);
   padding-bottom: 10px;
 }
 
@@ -410,8 +562,8 @@ html, body {
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: var(--qgu-navy);
-  color: #ffffff;
+  background: var(--brand-accent);
+  color: var(--on-brand);
   font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 700;
@@ -500,7 +652,7 @@ html, body {
   display: block;
   font-size: 0.87rem;
   font-weight: 700;
-  color: var(--qgu-navy);
+  color: var(--accent-title);
 }
 
 .toggle-sub {
@@ -549,7 +701,7 @@ html, body {
 }
 
 .switch input:checked + .slider {
-  background-color: var(--qgu-navy-mid);
+  background-color: var(--brand-accent);
 }
 
 .switch input:checked + .slider:before {
@@ -582,20 +734,20 @@ html, body {
   padding: 12px 18px;
   border: none;
   border-radius: 11px;
-  background: linear-gradient(135deg, var(--qgu-navy) 0%, var(--qgu-navy-mid) 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-mid) 100%);
+  color: var(--on-brand);
   font-family: inherit;
   font-size: 0.98rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(22, 50, 79, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
   min-height: 44px;
 }
 
 .btn-primary:hover {
   filter: brightness(1.08);
-  box-shadow: 0 6px 18px rgba(22, 50, 79, 0.32);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.26);
 }
 
 .btn-primary:active {
@@ -606,8 +758,8 @@ html, body {
   padding: 7px 13px;
   border: 1px solid var(--border);
   border-radius: 9px;
-  background: #ffffff;
-  color: var(--qgu-navy);
+  background: var(--bg-subtle);
+  color: var(--accent-title);
   font-family: inherit;
   font-size: 0.83rem;
   font-weight: 600;
@@ -617,8 +769,50 @@ html, body {
 }
 
 .btn-secondary:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
+  background: var(--bg-hover);
+  border-color: var(--qgu-sage);
+}
+
+.btn-toggle-full {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-subtle);
+  color: var(--accent-title);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 40px;
+}
+
+.btn-toggle-full:hover {
+  background: var(--bg-hover);
+  border-color: var(--qgu-sage);
+}
+
+.btn-cad-switch {
+  padding: 7px 13px;
+  border: 1px solid var(--sage-border);
+  border-radius: 9px;
+  background: var(--sage-bg);
+  color: var(--sage-fg);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 36px;
+}
+
+.btn-cad-switch:hover {
+  filter: brightness(1.07);
 }
 
 .btn-danger-soft {
@@ -663,20 +857,21 @@ html, body {
   gap: 6px;
   margin-top: 12px;
   padding: 10px 12px;
-  background: #f0f5fa;
-  border: 1px solid #d2e0ed;
+  background: var(--bg-limits);
+  border: 1px solid var(--border-limits);
   border-radius: 10px;
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--qgu-navy);
+  color: var(--accent-title);
 }
 
 .limits-chip {
-  background: #ffffff;
-  border: 1px solid #cbd9e6;
+  background: var(--bg-card);
+  border: 1px solid var(--border-limits);
+  color: var(--accent-title);
   padding: 3px 9px;
   border-radius: 7px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* =====================================================================
@@ -701,16 +896,16 @@ html, body {
   letter-spacing: 0.01em;
 }
 
-.badge-info { background: #e8f1f8; color: var(--qgu-navy); border: 1px solid #c2d8ea; }
-.badge-success { background: var(--success-soft); color: #047857; border: 1px solid #a7f3d0; }
-.badge-danger { background: var(--danger-soft); color: #b91c1c; border: 1px solid #fecaca; }
-.badge-warning { background: var(--warning-soft); color: var(--warning); border: 1px solid #fde68a; }
-.badge-dark { background: var(--qgu-sage-soft); color: var(--qgu-sage-dark); border: 1px solid #c8dfb9; }
+.badge-info { background: var(--info-bg); color: var(--info-fg); border: 1px solid var(--info-border); }
+.badge-success { background: var(--success-soft); color: var(--success-fg); border: 1px solid var(--success-border); }
+.badge-danger { background: var(--danger-soft); color: var(--danger-fg); border: 1px solid var(--danger-border); }
+.badge-warning { background: var(--warning-soft); color: var(--warning-fg); border: 1px solid var(--warning-border); }
+.badge-dark { background: var(--sage-bg); color: var(--sage-fg); border: 1px solid var(--sage-border); }
 
 .alert-list {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
   margin-bottom: 14px;
 }
 
@@ -720,9 +915,78 @@ html, body {
   font-size: 0.85rem;
   font-weight: 600;
   background: var(--warning-soft);
-  color: #92400e;
-  border: 1px solid #fde68a;
-  border-right: 4px solid #d97706;
+  color: var(--warning-fg);
+  border: 1px solid var(--warning-border);
+  border-right: 4px solid var(--warning);
+}
+
+.advisory-panel {
+  background: var(--warning-soft);
+  border: 1.5px solid var(--warning-border);
+  border-right: 5px solid var(--warning);
+  border-radius: 12px;
+  padding: 13px 15px;
+  color: var(--warning-fg);
+}
+
+.advisory-title {
+  font-weight: 800;
+  font-size: 0.94rem;
+  margin-bottom: 6px;
+}
+
+.advisory-block {
+  background: var(--box-bg);
+  border: 1px solid var(--warning-border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin-top: 6px;
+  font-size: 0.86rem;
+  line-height: 1.58;
+  color: var(--text-main);
+}
+
+.advisory-block.solution {
+  background: var(--sol-bg);
+  border-color: var(--sol-border);
+}
+
+.advisory-block-label {
+  display: block;
+  font-weight: 800;
+  margin-bottom: 2px;
+  color: var(--warning-fg);
+}
+
+.advisory-block.solution .advisory-block-label {
+  color: var(--sol-fg);
+}
+
+.empty-state-box {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+}
+
+.empty-state-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--accent-title);
+}
+
+.empty-state-msg {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 540px;
+  line-height: 1.65;
 }
 
 .field-hint {
@@ -738,19 +1002,19 @@ html, body {
 }
 
 .error-panel {
-  background: #fef2f2;
-  border: 1.5px solid #fca5a5;
+  background: var(--danger-soft);
+  border: 1.5px solid var(--danger-border);
   border-right: 5px solid var(--danger);
   border-radius: 12px;
   padding: 16px 18px;
   margin-bottom: 14px;
-  color: #7f1d1d;
+  color: var(--danger-fg);
 }
 
 .error-panel-title {
   font-size: 1rem;
   font-weight: 800;
-  color: #991b1b;
+  color: var(--danger-fg);
   margin: 0 0 10px;
   display: flex;
   align-items: center;
@@ -758,31 +1022,31 @@ html, body {
 }
 
 .error-panel-block {
-  background: #ffffff;
-  border: 1px solid #fecaca;
+  background: var(--box-bg);
+  border: 1px solid var(--danger-border);
   border-radius: 9px;
   padding: 10px 13px;
   margin-top: 8px;
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #1e293b;
+  color: var(--text-main);
 }
 
 .error-panel-block.solution {
-  border-color: #bae6fd;
-  border-right: 4px solid var(--primary);
-  background: #f0f9ff;
+  border-color: var(--sol-border);
+  border-right: 4px solid var(--qgu-sage);
+  background: var(--sol-bg);
 }
 
 .error-panel-label {
   display: inline-block;
   font-weight: 800;
   margin-left: 6px;
-  color: #991b1b;
+  color: var(--danger-fg);
 }
 
 .error-panel-block.solution .error-panel-label {
-  color: var(--primary-dark);
+  color: var(--sol-fg);
 }
 
 /* CAD Toolbar & Frame */
@@ -794,7 +1058,7 @@ html, body {
   gap: 10px;
   margin-bottom: 12px;
   padding-bottom: 10px;
-  border-bottom: 1.5px solid #edf2f7;
+  border-bottom: 1.5px solid var(--border-soft);
 }
 
 .cad-toolbar-actions {
@@ -804,13 +1068,62 @@ html, body {
   align-items: center;
 }
 
+.cad-stage {
+  position: relative;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #f8fafc;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
 .cad-wrap {
   background: #f8fafc;
-  border: 1.5px solid #dbe4ee;
-  border-radius: 12px;
-  padding: 10px;
+  padding: 8px;
   overflow: hidden;
-  box-shadow: inset 0 1px 4px rgba(15, 23, 42, 0.04);
+  transform-origin: center center;
+  transition: transform 0.08s ease-out;
+}
+
+.cad-zoom-controls {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(17, 28, 23, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9px;
+  padding: 3px 5px;
+}
+
+.cad-zoom-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cad-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.cad-zoom-readout {
+  color: #e6f4dc;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0 4px;
 }
 
 .cad-svg, .bmd-svg {
@@ -831,7 +1144,7 @@ html, body {
 .kpi-card {
   background: var(--bg-subtle);
   border: 1px solid var(--border-soft);
-  border-top: 3px solid var(--qgu-navy-mid);
+  border-top: 3px solid var(--qgu-sage);
   border-radius: 11px;
   padding: 11px 13px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -852,7 +1165,7 @@ html, body {
 .kpi-value {
   font-size: 1.06rem;
   font-weight: 800;
-  color: var(--qgu-navy);
+  color: var(--accent-title);
   margin-top: 4px;
   line-height: 1.3;
   word-break: break-word;
@@ -887,9 +1200,9 @@ html, body {
 }
 
 .tab-btn.active {
-  background: var(--qgu-navy);
-  color: #ffffff;
-  border-color: var(--qgu-navy);
+  background: var(--brand-accent);
+  color: var(--on-brand);
+  border-color: var(--brand-accent);
 }
 
 .table-scroll {
@@ -924,8 +1237,8 @@ html, body {
 }
 
 .data-table th {
-  background: #f1f5f9;
-  color: var(--qgu-navy);
+  background: var(--bg-subtle);
+  color: var(--accent-title);
   font-weight: 700;
 }
 
@@ -948,8 +1261,8 @@ html, body {
 
 /* Extra Details Drawer (Steps, B.M.D, S.F.D) */
 .extra-drawer {
-  margin-top: 18px;
-  border-top: 1.5px solid #edf2f7;
+  margin-top: 14px;
+  border-top: 1.5px solid var(--border-soft);
   padding-top: 14px;
 }
 
@@ -974,9 +1287,9 @@ html, body {
 }
 
 .drawer-tab-btn.active {
-  background: var(--qgu-navy);
-  color: #ffffff;
-  border-color: var(--qgu-navy);
+  background: var(--brand-accent);
+  color: var(--on-brand);
+  border-color: var(--brand-accent);
 }
 
 .diagram-wrap {
@@ -1065,14 +1378,14 @@ html, body {
 }
 
 .print-option-card.selected {
-  border-color: var(--qgu-navy-mid);
-  background: #edf4fa;
+  border-color: var(--qgu-sage);
+  background: var(--sage-bg);
 }
 
 .print-option-title {
   font-weight: 700;
   font-size: 0.9rem;
-  color: var(--qgu-navy);
+  color: var(--accent-title);
   margin-bottom: 4px;
 }
 
@@ -1109,9 +1422,9 @@ html, body {
    ===================================================================== */
 .app-footer {
   margin-top: auto;
-  background: #ffffff;
+  background: var(--bg-card);
   border-top: 1px solid var(--border-soft);
-  padding: 18px 20px;
+  padding: 16px 20px;
   color: var(--text-muted);
 }
 
@@ -1133,8 +1446,8 @@ html, body {
   justify-content: center;
   gap: 8px 18px;
   font-size: 0.9rem;
-  font-weight: 300;
-  color: #475569;
+  font-weight: 500;
+  color: var(--text-secondary);
   letter-spacing: 0.01em;
 }
 
@@ -1145,24 +1458,24 @@ html, body {
 }
 
 .footer-credit-label {
-  color: #94a3b8;
-  font-weight: 300;
-}
-
-.footer-credit-name {
-  color: #334155;
+  color: var(--text-muted);
   font-weight: 400;
 }
 
+.footer-credit-name {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
 .footer-sep {
-  color: #cbd5e1;
-  font-weight: 300;
+  color: var(--border);
+  font-weight: 400;
 }
 
 .footer-meta {
   font-size: 0.76rem;
-  font-weight: 300;
-  color: #94a3b8;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
 /* Utilities & Toast */
@@ -1425,7 +1738,8 @@ html, body {
           <option value="">أمثلة جاهزة (Presets)...</option>
         </select>
 
-        <button type="button" id="btnReset" class="btn-outline-light" title="إعادة الضبط للقيم الافتراضية">إعادة ضبط</button>
+        <button type="button" id="btnThemeToggle" class="btn-outline-light" title="تبديل المظهر (تلقائي / نهاري / ليلي)">🌓 تلقائي</button>
+        <button type="button" id="btnReset" class="btn-outline-light" title="تفريغ الحقول للبدء من جديد">إعادة ضبط</button>
         <button type="button" id="btnPrintPdf" class="btn-outline-light btn-print-accent">طباعة المقطع (PDF)</button>
       </div>
     </div>
@@ -1473,7 +1787,7 @@ html, body {
           </div>
           <div class="field full">
             <label for="beamTag">اسم / رمز الجسر (Beam Mark)</label>
-            <input type="text" id="beamTag" value="B1" placeholder="B1" />
+            <input type="text" id="beamTag" value="" placeholder="مثال: B1" />
           </div>
         </div>
 
@@ -1506,11 +1820,11 @@ html, body {
         <div id="manualRectDims" class="form-grid hidden">
           <div class="field">
             <label for="bw">عرض الجذع bw (mm)</label>
-            <input type="text" inputmode="decimal" id="bw" value="300" />
+            <input type="text" inputmode="decimal" id="bw" value="" placeholder="مثال: 300" />
           </div>
           <div class="field">
             <label for="h">العمق الكلي h (mm)</label>
-            <input type="text" inputmode="decimal" id="h" value="500" />
+            <input type="text" inputmode="decimal" id="h" value="" placeholder="مثال: 550" />
           </div>
           <div class="field">
             <label for="dOverride">العمق الفعال d (mm - اختياري)</label>
@@ -1525,19 +1839,19 @@ html, body {
         <div id="flangeFields" class="form-grid hidden" style="margin-top:11px;">
           <div class="field">
             <label for="hf">سمك الشفة hf (mm)</label>
-            <input type="text" inputmode="decimal" id="hf" value="150" />
+            <input type="text" inputmode="decimal" id="hf" value="" placeholder="مثال: 120" />
           </div>
           <div class="field hidden" id="isolatedFlangeField">
             <label for="bfActual">عرض الشفة bf (mm)</label>
-            <input type="text" inputmode="decimal" id="bfActual" value="700" />
+            <input type="text" inputmode="decimal" id="bfActual" value="" placeholder="مثال: 900" />
           </div>
           <div class="field" id="continuousSpacingField">
             <label for="s1Mm">المسافة الصافية s1 (mm)</label>
-            <input type="text" inputmode="decimal" id="s1Mm" value="3000" />
+            <input type="text" inputmode="decimal" id="s1Mm" value="" placeholder="مثال: 2000" />
           </div>
           <div class="field" id="s2FieldWrap">
             <label for="s2Mm">المسافة الصافية s2 (mm)</label>
-            <input type="text" inputmode="decimal" id="s2Mm" value="3000" />
+            <input type="text" inputmode="decimal" id="s2Mm" value="" placeholder="مثال: 2000" />
           </div>
         </div>
       </section>
@@ -1565,27 +1879,18 @@ html, body {
             </select>
           </div>
 
-          <div class="field full hidden" id="exteriorEndWrap">
-            <label for="exteriorEndType">نوع المسند الطرفي (Exterior Support)</label>
-            <select id="exteriorEndType">
-              <option value="column">Integral Column (عمود متصل: L²/14 و L²/16)</option>
-              <option value="spandrel">Spandrel Beam (جسر طرفي: L²/14 و L²/24)</option>
-              <option value="unrestrained">Unrestrained (غير مقيد: L²/11 و 0)</option>
-            </select>
-          </div>
-
           <div class="field full" id="singleSpanWrap">
             <label for="spanMeters">طول الفضاء L (m)</label>
-            <input type="text" inputmode="decimal" id="spanMeters" value="6" />
+            <input type="text" inputmode="decimal" id="spanMeters" value="" placeholder="مثال: 6.0" />
           </div>
 
           <div class="field" id="directMomentWrap" style="display:none;">
             <label for="directMoment">العزم المصعّد Mu (kN·m)</label>
-            <input type="text" inputmode="decimal" id="directMoment" value="307" />
+            <input type="text" inputmode="decimal" id="directMoment" value="" placeholder="مثال: 220" />
           </div>
           <div class="field" id="directVuWrap" style="display:none;">
             <label for="directVu">القص المصعّد Vu (kN - اختياري)</label>
-            <input type="text" inputmode="decimal" id="directVu" value="0" />
+            <input type="text" inputmode="decimal" id="directVu" value="" placeholder="مثال: 140" />
           </div>
         </div>
 
@@ -1593,11 +1898,11 @@ html, body {
           <div class="form-grid">
             <div class="field">
               <label for="dl">الحمل الميت DL (kN/m)</label>
-              <input type="text" inputmode="decimal" id="dl" value="25" />
+              <input type="text" inputmode="decimal" id="dl" value="" placeholder="مثال: 20" />
             </div>
             <div class="field">
               <label for="ll">الحمل الحي LL (kN/m)</label>
-              <input type="text" inputmode="decimal" id="ll" value="10" />
+              <input type="text" inputmode="decimal" id="ll" value="" placeholder="مثال: 12" />
             </div>
             <div class="field">
               <label for="loadFactorDL">معامل الحمل الميت (DL Factor)</label>
@@ -1725,7 +2030,7 @@ html, body {
         <div class="form-grid">
           <div class="field">
             <label for="anTensionCount">عدد قضبان الشد (Tension Count)</label>
-            <input type="text" inputmode="numeric" id="anTensionCount" value="4" />
+            <input type="text" inputmode="numeric" id="anTensionCount" value="" placeholder="مثال: 4" />
           </div>
           <div class="field">
             <label for="anTensionDia">قطر قضيب الشد (Tension Ø)</label>
@@ -1741,7 +2046,7 @@ html, body {
           </div>
           <div class="field">
             <label for="anCompCount">عدد قضبان الضغط (اختياري)</label>
-            <input type="text" inputmode="numeric" id="anCompCount" value="0" />
+            <input type="text" inputmode="numeric" id="anCompCount" value="" placeholder="0 (اختياري)" />
           </div>
           <div class="field">
             <label for="anCompDia">قطر قضيب الضغط (Comp. Ø)</label>
@@ -1778,12 +2083,12 @@ html, body {
           </div>
           <div class="field">
             <label for="fc" id="fcLabel">مقاومة الأسطوانة f'c (MPa)</label>
-            <input type="text" inputmode="decimal" id="fc" value="28" />
+            <input type="text" inputmode="decimal" id="fc" value="" placeholder="مثال: 28" />
             <span id="fcConvHint" class="field-hint">النطاق المسموح: 17–55 MPa</span>
           </div>
           <div class="field">
             <label for="fy">إجهاد الخضوع fy (MPa)</label>
-            <input type="text" inputmode="decimal" id="fy" value="420" />
+            <input type="text" inputmode="decimal" id="fy" value="" placeholder="مثال: 420" />
           </div>
           <div class="field">
             <label for="es">معامل المرونة Es (MPa)</label>
@@ -1847,6 +2152,13 @@ html, body {
         <div class="alert-list hidden" id="alertList"></div>
         <div class="error-panel hidden" id="errorPanel" role="alert"></div>
 
+        <div class="empty-state-box hidden" id="emptyPanel">
+          <span class="badge badge-dark">ACI 318-19 • مستعد للتصميم</span>
+          <h2 class="empty-state-title" id="emptyTitle">جاهز لإدخال بيانات الجسر</h2>
+          <p class="empty-state-msg" id="emptyMessage">أدخل الأبعاد والأحمال ومقاومة الخرسانة والحديد ثم اضغط «احسب وصمّم المقطع»، أو اختر مثالاً توضيحياً جاهزاً من قائمة الأمثلة بالأعلى.</p>
+          <button type="button" id="btnPickExampleFromEmpty" class="btn-cad-switch">✨ اختيار مثال توضيحي جاهز</button>
+        </div>
+
         <!-- Continuous ACI 6.5 Section Switcher -->
         <div id="continuousOutputPanel" class="hidden" style="margin-bottom:14px;">
           <div class="section-tabs" id="contSectionTabs"></div>
@@ -1867,28 +2179,38 @@ html, body {
           </div>
         </div>
 
-        <!-- Toolbar for CAD Section -->
-        <div class="cad-toolbar no-print">
+        <!-- Toolbar for CAD Section (No duplicate +Mu/-Mu, No SVG download outside Print modal) -->
+        <div class="cad-toolbar no-print" id="cadToolbar">
           <h2 class="card-title" style="border:none;padding:0;margin:0;">
-            <span>المقطع العرضي والخصائص الهندسية</span>
+            <span>المقطع العرضي التفاعلي</span>
           </h2>
           <div class="cad-toolbar-actions">
-            <div class="seg-group light" role="group" aria-label="Moment Sign">
-              <button type="button" id="btnCadSignPos" class="seg-btn active">+Mu</button>
-              <button type="button" id="btnCadSignNeg" class="seg-btn">-Mu</button>
-            </div>
-            <button type="button" id="btnToggleDetails" class="btn-secondary">إظهار Steps &amp; B.M.D / S.F.D</button>
-            <button type="button" id="btnDownloadSvg" class="btn-secondary">تحميل SVG</button>
+            <button type="button" id="btnToggleCadStyle" class="btn-cad-switch">⇄ عرض أوتوكاد (AutoCAD)</button>
           </div>
         </div>
 
-        <!-- 2D CAD Cross Section (ONLY this prints in PDF!) -->
-        <div class="cad-wrap" id="cadContainer"></div>
+        <!-- Interactive 2D CAD Cross Section with Zoom/Pan -->
+        <div class="cad-stage" id="cadStage">
+          <div class="cad-zoom-controls no-print" id="cadZoomControls">
+            <button type="button" class="cad-zoom-btn" id="btnZoomIn" title="تكبير">+</button>
+            <span class="cad-zoom-readout hidden" id="zoomReadout">100%</span>
+            <button type="button" class="cad-zoom-btn hidden" id="btnZoomOut" title="تصغير">−</button>
+            <button type="button" class="cad-zoom-btn hidden" id="btnZoomReset" title="إعادة ضبط">⟲</button>
+          </div>
+          <div class="cad-wrap" id="cadContainer"></div>
+        </div>
 
-        <!-- Compact Section Properties Right Underneath -->
-        <div class="kpi-grid" id="kpiGrid"></div>
+        <!-- Collapsible Section KPIs Toggle Button + Hidden Grid -->
+        <div class="no-print" id="kpiToggleWrap" style="margin-top:14px;">
+          <button type="button" id="btnToggleKpis" class="btn-toggle-full">عرض معلومات المقطع والخصائص الهندسية (ρ, a, φ, As...)</button>
+        </div>
+        <div class="kpi-grid hidden" id="kpiGrid"></div>
 
-        <!-- Hidden-by-Default Expandable Drawer: Calculation Steps, B.M.D & S.F.D -->
+        <!-- Bottom Steps & B.M.D / S.F.D Toggle Button + Expandable Drawer -->
+        <div class="no-print" id="detailsToggleWrap" style="margin-top:12px;">
+          <button type="button" id="btnToggleDetails" class="btn-toggle-full">إظهار خطوات الحل ومخططات العزم والقص (Steps &amp; B.M.D / S.F.D)</button>
+        </div>
+
         <div id="extraDetailsDrawer" class="extra-drawer no-print hidden">
           <div class="drawer-tabs" role="tablist">
             <button type="button" class="drawer-tab-btn active" data-tab="steps">خطوات الحل (Calculation Steps)</button>
@@ -1960,7 +2282,7 @@ html, body {
       <div id="autocadPreviewBox" class="autocad-preview-wrap"></div>
 
       <div class="modal-actions">
-        <button type="button" id="btnDownloadAutoCadSvg" class="btn-secondary">تحميل AutoCAD SVG</button>
+        <button type="button" id="btnDownloadModalSvg" class="btn-secondary">تحميل SVG</button>
         <button type="button" id="btnConfirmPrint" class="btn-primary" style="width:auto;padding:9px 22px;">طباعة / حفظ PDF</button>
       </div>
     </div>
@@ -2135,7 +2457,8 @@ html, body {
    * @returns {number}
    */
   function calcRhoMin(fc, fy) {
-    return Math.max(Math.sqrt(fc) / (4 * fy), 1.4 / fy);
+    const fyEff = Math.min(fy, 550); // ACI 9.6.1.2 limit
+    return Math.max(Math.sqrt(fc) / (4 * fyEff), 1.4 / fyEff);
   }
 
   /**
@@ -3525,9 +3848,7 @@ html, body {
     const hf = input.hf || 0;
     const reinforcementMode = input.reinforcementMode || 'auto'; // 'auto' | 'singly' | 'doubly'
     const hMax = input.hMax && input.hMax > 0 ? input.hMax : null;
-    const isoCap = (sectionType === 'isolated_t' && input.bfActual && input.bfActual > 0) ? input.bfActual : null;
-    const rawBwMax = input.bwMax && input.bwMax > 0 ? input.bwMax : null;
-    const bwMax = (rawBwMax && isoCap) ? Math.min(rawBwMax, isoCap) : (rawBwMax || isoCap);
+    const bwMax = input.bwMax && input.bwMax > 0 ? input.bwMax : null;
 
     const rhoMin = C.calcRhoMin(fc, fy);
     const rhoMax = C.calcRhoMax(fc, fy, es, epsCu);
@@ -3807,34 +4128,16 @@ html, body {
         c = a / beta1;
         steps.push('(ρ - ρ\') = ' + C.roundTo(rho - rhoPrime, 5) + ' ≥ K (' + C.roundTo(K, 5) + ') ← حديد الضغط يخضع (f\'s = fy).');
       } else {
-        // First solve assuming compression steel is in compression (c >= d', with 0.85*fc concrete displacement)
+        // Solve quadratic: [0.85*fc*beta1*b]*c^2 + [(epsCu*Es - 0.85*fc)*As' - As*fy]*c - epsCu*Es*As'*d' = 0
         const A1 = 0.85 * fc * beta1 * b;
         const A2 = asPrime * (epsCuEs - 0.85 * fc) - as * fy;
         const A3 = -epsCuEs * asPrime * dPrime;
         const disc = A2 * A2 - 4 * A1 * A3;
         c = (-A2 + Math.sqrt(Math.max(0, disc))) / (2 * A1);
         a = beta1 * c;
-
-        if (c < dPrime) {
-          // Neutral axis rises above A's -> upper steel is in TENSION (cracked zone, NO 0.85*fc deduction!)
-          const A2t = asPrime * epsCuEs - as * fy;
-          const discT = A2t * A2t - 4 * A1 * A3;
-          c = (-A2t + Math.sqrt(Math.max(0, discT))) / (2 * A1);
-          a = beta1 * c;
-          let fsPrimeT = c > 0 ? epsCuEs * ((c - dPrime) / c) : -fy;
-          if (fsPrimeT < -fy) {
-            fsPrimeT = -fy;
-            a = ((as + asPrime) * fy) / (0.85 * fc * b);
-            c = a / beta1;
-          }
-          fsPrime = fsPrimeT;
-          as1 = (as * fy - asPrime * fsPrime) / fy;
-          steps.push('محور التعادل أعلى من حديد الضغط (c = ' + C.roundTo(c, 2) + ' mm < d\' = ' + C.roundTo(dPrime, 1) + ' mm): الحديد العلوي دخل في منطقة الشد (f\'s = ' + C.roundTo(fsPrime, 1) + ' MPa) دون خصم خرسانة مزاحة.');
-        } else {
-          fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
-          as1 = (as * fy - asPrime * fsPrime) / fy;
-          steps.push('(ρ - ρ\') = ' + C.roundTo(rho - rhoPrime, 5) + ' < K (' + C.roundTo(K, 5) + ') ← حديد الضغط لا يخضع (f\'s = ' + C.roundTo(fsPrime, 1) + ' MPa).');
-        }
+        fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
+        as1 = (as * fy - asPrime * fsPrime) / fy;
+        steps.push('(ρ - ρ\') = ' + C.roundTo(rho - rhoPrime, 5) + ' < K (' + C.roundTo(K, 5) + ') ← حديد الضغط لا يخضع (f\'s = ' + C.roundTo(fsPrime, 1) + ' MPa).');
       }
 
       const phiInfo = C.calcPhiFlexure(c, dt, fy, es, epsCu);
@@ -3844,14 +4147,11 @@ html, body {
         warnings.push('تحذير: المقطع مسيطر عليه بالانضغاط (φ = 0.65).');
       }
 
-      // Displaced concrete area deduction (0.85*fc) applies ONLY when compression steel is in compression (c >= d')
+      // Displaced concrete area deduction (0.85*fc) unified across equilibrium quadratic & Mn
       let ccForce, csForce;
       if (yields) {
         ccForce = 0.85 * fc * a * b;
         csForce = asPrime * fy;
-      } else if (c < dPrime) {
-        ccForce = 0.85 * fc * a * b;
-        csForce = asPrime * fsPrime; // negative (tension force) in cracked zone -> no 0.85*fc deduction
       } else {
         ccForce = 0.85 * fc * a * b;
         csForce = asPrime * (fsPrime - 0.85 * fc);
@@ -4024,30 +4324,13 @@ html, body {
         if (a < hf) {
           const A1f = 0.85 * fc * beta1 * be;
           const A2f = asPrime * (epsCuEs - 0.85 * fc) - as * fy;
-          c = (-A2f + Math.sqrt(Math.max(0, A2f * A2f - 4 * A1f * A3))) / (2 * A1f);
+          const cF = (-A2f + Math.sqrt(Math.max(0, A2f * A2f - 4 * A1f * A3))) / (2 * A1f);
+          c = cF;
           a = beta1 * c;
-          if (c < dPrime) {
-            const A2ft = asPrime * epsCuEs - as * fy;
-            c = (-A2ft + Math.sqrt(Math.max(0, A2ft * A2ft - 4 * A1f * A3))) / (2 * A1f);
-            a = beta1 * c;
-            fsPrime = Math.max(-fy, c > 0 ? epsCuEs * ((c - dPrime) / c) : -fy);
-            const ccFlange = 0.85 * fc * a * be;
-            const csForce = asPrime * fsPrime;
-            mn = (ccFlange * (d - a / 2) + csForce * (d - dPrime)) / 1e6;
-          } else {
-            fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
-            const ccFlange = 0.85 * fc * a * be;
-            const csForce = asPrime * (fsPrime - 0.85 * fc);
-            mn = (ccFlange * (d - a / 2) + csForce * (d - dPrime)) / 1e6;
-          }
-        } else if (c < dPrime) {
-          const A2wt = asPrime * epsCuEs - asWebTotal * fy;
-          c = (-A2wt + Math.sqrt(Math.max(0, A2wt * A2wt - 4 * A1 * A3))) / (2 * A1);
-          a = beta1 * c;
-          fsPrime = Math.max(-fy, c > 0 ? epsCuEs * ((c - dPrime) / c) : -fy);
-          const ccWeb = 0.85 * fc * a * bw;
-          const csForce = asPrime * fsPrime;
-          mn = (ccWeb * (d - a / 2) + csForce * (d - dPrime) + asf * fy * (d - hf / 2)) / 1e6;
+          fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
+          const ccFlange = 0.85 * fc * a * be;
+          const csForce = asPrime * (fsPrime - 0.85 * fc);
+          mn = (ccFlange * (d - a / 2) + csForce * (d - dPrime)) / 1e6;
         } else {
           fsPrime = c > 0 ? Math.min(fy, epsCuEs * ((c - dPrime) / c)) : 0;
           const ccWeb = 0.85 * fc * a * bw;
@@ -4476,12 +4759,13 @@ html, body {
     }
 
     const candidates = [];
+    let preferredRejectedInfo = null;
 
     for (let i = 0; i < catalog.length; i++) {
       const bar = catalog[i];
-      if (preferredBarDia && Math.abs(bar.diameter - preferredBarDia) > 0.6 && String(bar.designation) !== String(preferredBarDia)) {
-        continue;
-      }
+      const isPreferredMatch = !preferredBarDia || Math.abs(bar.diameter - preferredBarDia) <= 0.6 || String(bar.designation) === String(preferredBarDia);
+      if (!isPreferredMatch) continue;
+
       const nRaw = Math.max(minBars, Math.ceil(asReq / bar.area - 1e-9));
       const layout = layoutBars({
         count: nRaw,
@@ -4491,13 +4775,17 @@ html, body {
         cover: cover,
         stirrupDia: stirrupDia,
         aggSize: aggSize,
+        layerClearSpacing: params.layerClearSpacing !== undefined ? params.layerClearSpacing : 25,
       });
 
-      // Only accept if fits within 2 layers with valid spacing
-      if (!layout.spacingOk) continue;
+      if (!layout.spacingOk) {
+        if (preferredBarDia) {
+          preferredRejectedInfo = { bar: bar, nRaw: nRaw, layout: layout };
+        }
+        continue;
+      }
 
       const excessRatio = (layout.totalArea - asReq) / Math.max(asReq, 1);
-      // Score: lower is better; strongly prefer 1 layer, symmetric 2nd layer (>=2 bars), standard primary bars
       let score = excessRatio * 100;
       if (layout.layers === 2) score += 25;
       if (layout.layers === 2 && layout.layer2Count === 1) score += 60;
@@ -4521,6 +4809,7 @@ html, body {
           cover: cover,
           stirrupDia: stirrupDia,
           aggSize: aggSize,
+          layerClearSpacing: params.layerClearSpacing !== undefined ? params.layerClearSpacing : 25,
         });
         const excessRatio = (layout.totalArea - asReq) / Math.max(asReq, 1);
         candidates.push({
@@ -4531,7 +4820,20 @@ html, body {
     }
 
     candidates.sort(function (a, b) { return a.score - b.score; });
-    return candidates[0].layout;
+    const chosen = Object.assign({}, candidates[0].layout);
+    if (preferredRejectedInfo && preferredBarDia) {
+      const rb = preferredRejectedInfo.bar;
+      const rLay = preferredRejectedInfo.layout;
+      const nRaw = preferredRejectedInfo.nRaw;
+      const barsPerLayerNeed = Math.ceil(nRaw / 2);
+      const bwNeeded = Math.ceil((2 * (cover + stirrupDia) + barsPerLayerNeed * rb.diameter + Math.max(0, barsPerLayerNeed - 1) * rLay.minClearSpacing) / 25) * 25;
+      chosen.fallbackNotice = {
+        title: 'تعذّر استخدام القطر المفضّل (' + rb.id + ') في صفّين نظاميين',
+        reason: 'المساحة المطلوبة (As = ' + C.roundTo(asReq, 0) + ' mm²) تحتاج ' + nRaw + rb.id + '، ولكن عرض الجذع الحالي (bw = ' + C.roundTo(bw, 0) + ' mm) يتسع بحد أقصى لـ ' + (rLay.maxPerLayer * 2) + ' قضبان فقط في صفّين بالتباعد النظامي (s_min = ' + C.roundTo(rLay.minClearSpacing, 1) + ' mm)، مما يسبب تكدّساً عند s = ' + C.roundTo(rLay.clearSpacing, 1) + ' mm؛ لذلك تم اختيار البديل النظامي ' + chosen.count + chosen.bar.id + '.',
+        solution: 'لإجبار التصميم على استخدام ' + rb.id + ' بدون تكدّس: زِد عرض الجذع bw إلى ' + bwNeeded + ' mm على الأقل أو زِد العمق h لتقليل مساحة الحديد، أو أبقِ على البديل الأوتوماتيكي ' + chosen.count + chosen.bar.id + ' (المستوفى لشروط التباعد ACI 25.2).',
+      };
+    }
+    return chosen;
   }
 
   /**
@@ -4668,20 +4970,6 @@ html, body {
         minBars: 2,
         preferredBarDia: params.preferredBarDia,
       });
-      // Fall back to any optimal bar only if preferredBarDia cannot fit within 2 layers
-      if (params.preferredBarDia && !upgradedTension.spacingOk) {
-        upgradedTension = selectReinforcementBars({
-          asRequired: targetAsReq,
-          bw: bw,
-          h: h,
-          barStandard: standard,
-          cover: cover,
-          stirrupDia: stirrupDia,
-          aggSize: aggSize,
-          layerClearSpacing: layerClearSpacing,
-          minBars: 2,
-        });
-      }
 
       // Ensure tension area strictly grows if re-selection picked same bars
       if (upgradedTension.totalArea <= tensionLayout.totalArea + 1e-6) {
@@ -4709,6 +4997,7 @@ html, body {
             aggSize: aggSize,
             layerClearSpacing: layerClearSpacing,
             minBars: 2,
+            preferredBarDia: params.preferredBarDia,
           });
         }
       }
@@ -4751,6 +5040,11 @@ html, body {
     ]);
 
     const warnings = designRes.warnings.slice().concat(verification.warnings || []);
+    const structuredWarnings = [];
+    if (tensionLayout.fallbackNotice) {
+      structuredWarnings.push(tensionLayout.fallbackNotice);
+      warnings.unshift('تنبيه القطر المفضّل: ' + tensionLayout.fallbackNotice.title);
+    }
     if (!tensionLayout.spacingOk) {
       warnings.push('Spacing Warning (ACI 25.2.1): Clear spacing s = ' + C.roundTo(tensionLayout.clearSpacing, 1) + ' mm < s_min (' + C.roundTo(tensionLayout.minClearSpacing, 1) + ' mm) — increase bw.');
     }
@@ -4790,6 +5084,7 @@ html, body {
       rhoMax: verification.rhoMax,
       steps: combinedSteps,
       warnings: warnings,
+      structuredWarnings: structuredWarnings,
     };
   }
 
@@ -4944,26 +5239,9 @@ html, body {
         stirrupDia: rawNum(raw.stirrupDia),
         aggSize: rawNum(raw.aggSize),
         layerClearSpacing: rawNum(raw.layerClearSpacing),
-        s1Mm: rawNum(raw.s1Mm !== undefined ? raw.s1Mm : raw.s1),
-        s2Mm: rawNum(raw.s2Mm !== undefined ? raw.s2Mm : raw.s2),
         dOverride: rawNum(raw.dOverride),
         dPrimeOverride: rawNum(raw.dPrimeOverride),
         rhoTargetCustom: rawNum(raw.rhoTargetCustom),
-        slabS1: rawNum(rawSlab.s1),
-        slabS2: rawNum(rawSlab.s2),
-        slabCant: rawNum(rawSlab.cantileverWidth),
-        slabDL: rawNum(rawSlab.slabDL),
-        slabLL: rawNum(rawSlab.slabLL),
-        anTensionCount: raw.analysis ? rawNum(raw.analysis.tensionBarCount) : undefined,
-        anCompCount: raw.analysis ? rawNum(raw.analysis.compBarCount) : undefined,
-        anAsManual: raw.analysis ? rawNum(raw.analysis.asManual) : undefined,
-        anDManual: raw.analysis ? rawNum(raw.analysis.dManual) : undefined,
-        fyPresent: raw.fy !== undefined,
-        bwPresent: (raw.bw !== undefined || raw.b !== undefined),
-        hPresent: raw.h !== undefined,
-        dlPresent: raw.dl !== undefined,
-        llPresent: raw.ll !== undefined,
-        spanPresent: raw.spanMeters !== undefined,
       },
       momentSign: momentSign,
       isNegativeMoment: momentSign === 'negative',
@@ -5123,21 +5401,23 @@ html, body {
         return w.indexOf('Compression-Controlled') !== -1 || w.indexOf('Transition Zone') !== -1 || w.indexOf('بالانضغاط') !== -1 || w.indexOf('الانتقالية') !== -1;
       });
       const singlyLimitOk = !(activeMode === 'singly' && validOk && designDetail.warnings.some(function (w) { return w.indexOf('ρ > ρ_max') !== -1; }));
+      const preferredBarRejected = validOk && inp.preferredBarDia && designDetail.tensionBars && designDetail.tensionBars.fallbackNotice;
 
-      if (validOk && safeOk && tensionSpacingOk && compSpacingOk && deflOk && shearOk && crackOk && !hasShallowNA && !hasCompControl && singlyLimitOk) {
+      if (validOk && safeOk && tensionSpacingOk && compSpacingOk && deflOk && shearOk && crackOk && !hasShallowNA && !hasCompControl && singlyLimitOk && !preferredBarRejected) {
         break;
       }
 
       if (attempt === 16) break;
 
       const atHMax = Boolean(inp.hMax && (h + 25 > inp.hMax));
-      const effectiveBwCap = (inp.sectionType === 'isolated_t' && inp.bfActual > 0)
-        ? Math.min(inp.bwMax || Infinity, inp.bfActual)
-        : (inp.bwMax || Infinity);
-      const atBwMax = Number.isFinite(effectiveBwCap) && (bw + 25 > effectiveBwCap);
+      const atBwMax = Boolean(inp.bwMax && (bw + 25 > inp.bwMax));
       let changed = false;
 
-      if (hasShallowNA) {
+      if (preferredBarRejected && !inp.bwFixed && !atBwMax && bw < 500) {
+        bw += 25;
+        repairLog.push('Auto-Widened Web for Preferred Bar: bw = ' + bw + ' mm.');
+        changed = true;
+      } else if (hasShallowNA) {
         if (bw > 200 && !inp.bwFixed) {
           bw = Math.max(200, bw - 25);
           changed = true;
@@ -5295,7 +5575,7 @@ html, body {
     let contResult;
     let designedSections;
 
-    const maxContRepair = inp.autoSize ? 14 : 0;
+    const maxContRepair = inp.autoSize ? 8 : 0;
     for (let rep = 0; rep <= maxContRepair; rep++) {
       contResult = L.analyzeContinuousACI65({
         spans: spansParsed,
@@ -5403,38 +5683,17 @@ html, body {
 
       if (!inp.autoSize) break;
 
-      const contBwCap = (inp.sectionType === 'isolated_t' && inp.bfActual > 0)
-        ? Math.min(inp.bwMax || Infinity, inp.bfActual)
-        : (inp.bwMax || Infinity);
-      const canGrowBw = !inp.bwFixed && (bw + 25 <= contBwCap);
-      const canGrowH = !inp.hFixed && (!inp.hMax || h + 25 <= inp.hMax);
+      const allOk = designedSections.every(function (s) {
+        return s.valid && s.isSafe && s.tensionBars && s.tensionBars.spacingOk;
+      });
+      if (allOk && h >= contResult.deflection.hMin - 1e-6) break;
 
-      const allFlexSafe = designedSections.every(function (s) {
-        return s.valid && s.isSafe && s.phiMn >= s.muApplied - 1e-4 && s.phiZone !== 'compression';
-      });
-      const allTensionSpaceOk = designedSections.every(function (s) {
-        return s.tensionBars && s.tensionBars.spacingOk && s.tensionBars.fitsInTwoLayers;
-      });
-      const allCompSpaceOk = designedSections.every(function (s) {
-        return !s.compressionBars || s.compressionBars.isHangerOnly || s.compressionBars.spacingOk;
-      });
-      const allShearOk = designedSections.every(function (s) {
-        return !s.shearResult || (s.shearResult.sectionAdequate && s.shearResult.isSafe);
-      });
-      const deflOk = h >= contResult.deflection.hMin - 1e-6;
-
-      if (allFlexSafe && allTensionSpaceOk && allCompSpaceOk && allShearOk && deflOk) break;
-
-      if (!deflOk && canGrowH && (!inp.hMax || contResult.deflection.hMin <= inp.hMax)) {
-        h = Math.ceil(contResult.deflection.hMin / 25) * 25;
-      } else if ((!allTensionSpaceOk || !allCompSpaceOk) && canGrowBw) {
+      if (designedSections.some(function (s) { return !s.tensionBars || !s.tensionBars.spacingOk; }) && !inp.bwFixed && (!inp.bwMax || bw + 25 <= inp.bwMax)) {
         bw += 25;
-      } else if ((!allShearOk || !allFlexSafe) && canGrowH) {
+      } else if (!inp.hFixed && (!inp.hMax || h + 25 <= inp.hMax)) {
         h += 25;
-      } else if (canGrowBw) {
+      } else if (!inp.bwFixed && (!inp.bwMax || bw + 25 <= inp.bwMax)) {
         bw += 25;
-      } else if (canGrowH) {
-        h += 25;
       } else {
         break;
       }
@@ -5472,6 +5731,7 @@ html, body {
       warnings: (!contResult.allConditionsMet
         ? ['ACI 6.5 Notice: One or more applicability limits not satisfied.']
         : []).concat(activeSection.warnings || []),
+      structuredWarnings: activeSection.structuredWarnings || [],
     };
   }
 
@@ -5521,8 +5781,7 @@ html, body {
       };
     }
 
-    const riTop = inp.rawInputs || {};
-    if ((riTop.fyPresent && !Number.isFinite(riTop.fy)) || !Number.isFinite(inp.fy) || inp.fy <= 0 || inp.fy > 700) {
+    if (!Number.isFinite(inp.fy) || inp.fy <= 0 || inp.fy > 700) {
       return {
         valid: false,
         error: 'قيمة إجهاد الخضوع fy غير صالحة.',
@@ -5679,18 +5938,18 @@ html, body {
         }
       }
     } else {
-      // Manual Dimension Checks (catch blank/non-numeric too)
-      if ((ri.bwPresent && !Number.isFinite(ri.bw)) || inp.bw < 120 || inp.bw > 2000) {
+      // Manual Dimension Checks
+      if (ri.bw !== undefined && (!Number.isFinite(ri.bw) || ri.bw < 120 || ri.bw > 2000)) {
         return makeErr(
           'عرض الجذع (bw) خارج النطاق الإنشائي',
-          'القيمة المُدخلة لعرض الجذع (bw = ' + (Number.isFinite(ri.bw) ? C.roundTo(ri.bw, 1) + ' mm' : 'فارغة أو غير رقمية') + ') خارج النطاق العملي (120–2000 mm).',
+          'القيمة المُدخلة لعرض الجذع (bw = ' + (Number.isFinite(ri.bw) ? C.roundTo(ri.bw, 1) + ' mm' : 'غير رقمية') + ') خارج النطاق العملي (120–2000 mm).',
           'أدخل عرضاً عملياً بالمليمتر (مثلاً 250–400 mm).'
         );
       }
-      if ((ri.hPresent && !Number.isFinite(ri.h)) || inp.h < 150 || inp.h > 3000) {
+      if (ri.h !== undefined && (!Number.isFinite(ri.h) || ri.h < 150 || ri.h > 3000)) {
         return makeErr(
           'العمق الكلي (h) خارج النطاق الإنشائي',
-          'القيمة المُدخلة للعمق الكلي (h = ' + (Number.isFinite(ri.h) ? C.roundTo(ri.h, 1) + ' mm' : 'فارغة أو غير رقمية') + ') خارج النطاق العملي (150–3000 mm).',
+          'القيمة المُدخلة للعمق الكلي (h = ' + (Number.isFinite(ri.h) ? C.roundTo(ri.h, 1) + ' mm' : 'غير رقمية') + ') خارج النطاق العملي (150–3000 mm).',
           'أدخل عمقاً عملياً بالمليمتر (مثلاً 400–750 mm).'
         );
       }
@@ -5701,12 +5960,11 @@ html, body {
           'زِد عرض الجذع bw أو راجع قيمة الغطاء الخرساني.'
         );
       }
-      const maxPhysD = inp.h - inp.cover - inp.stirrupDia - 4;
-      if (inp.dOverride !== undefined && inp.dOverride > maxPhysD) {
+      if (inp.dOverride !== undefined && inp.dOverride >= inp.h) {
         return makeErr(
-          'تعارض في العمق الفعال (d أكبر من الحد الفيزيائي الممكن)',
-          'العمق الفعال المُدخل (d = ' + C.roundTo(inp.dOverride, 1) + ' mm) يتجاوز الحد الأقصى الممكن داخل المقطع بعد خصم الغطاء والأتاري (' + C.roundTo(maxPhysD, 1) + ' mm).',
-          'اجعل قيمة d أقل من ' + C.roundTo(maxPhysD, 0) + ' mm، أو اتركها فارغة ليتم حسابها تلقائياً.'
+          'تعارض في أبعاد العمق (d ≥ h)',
+          'العمق الفعال المُدخل (d = ' + C.roundTo(inp.dOverride, 1) + ' mm) لا يمكن أن يكون أكبر من أو مساوياً للعمق الكلي (h = ' + C.roundTo(inp.h, 1) + ' mm).',
+          'اجعل قيمة d أقل من h بمقدار الغطاء الخرساني وقطر الأتاري ونصف قطر القضيب، أو اتركها فارغة ليتم حسابها تلقائياً.'
         );
       }
       if (ri.dOverride !== undefined && (!Number.isFinite(ri.dOverride) || ri.dOverride <= 0)) {
@@ -5725,15 +5983,6 @@ html, body {
       }
     }
 
-    // Target rho validation (if user supplied)
-    if (ri.rhoTargetCustom !== undefined && (!Number.isFinite(ri.rhoTargetCustom) || ri.rhoTargetCustom < 0.001 || ri.rhoTargetCustom > 0.06)) {
-      return makeErr(
-        'النسبة المستهدفة للحديد (Target ρ) غير منطقية',
-        'القيمة المُدخلة لـ Target ρ خارج النطاق الهندسي (0.001 إلى 0.06).',
-        'اتركها فارغة ليعتمد الكود القيمة المثلى تلقائياً (0.6 × ρ_max) أو أدخل قيمة بين 0.004 و 0.025.'
-      );
-    }
-
     // Flanged section geometry checks
     if (inp.sectionType !== 'rectangular') {
       if (!Number.isFinite(inp.hf) || inp.hf < 50 || (!inp.autoSize && inp.hf >= inp.h - 50)) {
@@ -5743,95 +5992,11 @@ html, body {
           'أدخل سمك بلاطة عملياً (مثلاً 100–200 mm) وتأكد أنه أقل من العمق الكلي h.'
         );
       }
-      if (inp.sectionType === 'isolated_t') {
-        if (!Number.isFinite(inp.bfActual) || inp.bfActual < 150) {
-          return makeErr(
-            'عرض الشفة (bf) غير صالح',
-            'في مقطع Isolated T يجب أن يكون عرض الشفة bf رقماً موجباً لا يقل عن 150 mm.',
-            'أدخل عرض شفة عملياً (مثلاً 600–1200 mm).'
-          );
-        }
-        if ((!inp.autoSize && inp.bfActual < inp.bw) || (inp.autoSize && inp.bwFixed !== undefined && inp.bfActual < inp.bwFixed)) {
-          return makeErr(
-            'عرض الشفة (bf) أصغر من عرض الجذع (bw)',
-            'في مقطع Isolated T يجب أن يكون عرض الشفة bf أكبر من أو مساوياً لعرض الجذع bw.',
-            'زِد قيمة bf لتكون أكبر من bw.'
-          );
-        }
-      } else {
-        if (ri.s1Mm !== undefined && (!Number.isFinite(ri.s1Mm) || ri.s1Mm < 0 || ri.s1Mm > 30000)) {
-          return makeErr(
-            'المسافة الصافية للشفة (s1) غير صالحة',
-            'المسافة الصافية s1 يجب أن تكون رقماً غير سالب بالمليمتر (0–30000 mm).',
-            'أدخل قيمة موجبة بالمليمتر (مثلاً 3000 mm).'
-          );
-        }
-        if (inp.sectionType === 't_beam' && ri.s2Mm !== undefined && (!Number.isFinite(ri.s2Mm) || ri.s2Mm < 0 || ri.s2Mm > 30000)) {
-          return makeErr(
-            'المسافة الصافية للشفة (s2) غير صالحة',
-            'المسافة الصافية s2 يجب أن تكون رقماً غير سالب بالمليمتر (0–30000 mm).',
-            'أدخل قيمة موجبة بالمليمتر (مثلاً 3000 mm).'
-          );
-        }
-      }
-    }
-
-    // Slab Load Transfer validation
-    if (inp.slabTransfer && inp.slabTransfer.enabled) {
-      if (!Number.isFinite(ri.slabS1) || ri.slabS1 <= 0 || ri.slabS1 > 25) {
+      if (inp.sectionType === 'isolated_t' && (!Number.isFinite(inp.bfActual) || (!inp.autoSize && inp.bfActual < inp.bw))) {
         return makeErr(
-          'عرض البلاطة المجاورة (S1) غير صالح',
-          'عند تفعيل نقل أحمال البلاطة يجب أن يكون S1 رقماً موجباً بالمتر (0.5–25 m).',
-          'أدخل عرض الفضاء المجاور S1 بالمتر (مثلاً 4 m).'
-        );
-      }
-      if (inp.slabTransfer.beamPosition === 'interior' && (!Number.isFinite(ri.slabS2) || ri.slabS2 <= 0 || ri.slabS2 > 25)) {
-        return makeErr(
-          'عرض البلاطة المجاورة (S2) غير صالح',
-          'للكمرة الداخلية يجب أن يكون S2 رقماً موجباً بالمتر (0.5–25 m).',
-          'أدخل عرض الفضاء المجاور S2 بالمتر (مثلاً 4 m).'
-        );
-      }
-      if ((ri.slabCant !== undefined && (!Number.isFinite(ri.slabCant) || ri.slabCant < 0 || ri.slabCant > 10)) ||
-          !Number.isFinite(ri.slabDL) || ri.slabDL < 0 ||
-          !Number.isFinite(ri.slabLL) || ri.slabLL < 0) {
-        return makeErr(
-          'قيم أحمال البلاطة أو البروز غير صالحة',
-          'أحمال البلاطة (DL / LL) وعرض البروز (Overhang) يجب أن تكون أرقاماً غير سالبة.',
-          'راجع قيم أحمال البلاطة بـ kN/m² وعرض البروز بالمتر.'
-        );
-      }
-    }
-
-    // Analysis Mode specific inputs validation
-    if (inp.mode === 'analysis') {
-      if (ri.anTensionCount !== undefined && (!Number.isFinite(ri.anTensionCount) || ri.anTensionCount < 1 || ri.anTensionCount > 30)) {
-        return makeErr(
-          'عدد قضبان الشد في وضع التحليل غير صالح',
-          'يجب أن يكون عدد قضبان الشد رقماً صحيحاً بين 1 و 30.',
-          'أدخل عدداً صحيحاً للقضبان (مثلاً 4).'
-        );
-      }
-      if (ri.anCompCount !== undefined && (!Number.isFinite(ri.anCompCount) || ri.anCompCount < 0 || ri.anCompCount > 30)) {
-        return makeErr(
-          'عدد قضبان الضغط في وضع التحليل غير صالح',
-          'يجب أن يكون عدد قضبان الضغط رقماً صحيحاً بين 0 و 30.',
-          'أدخل 0 في حال عدم وجود حديد ضغط، أو عدداً صحيحاً موجباً.'
-        );
-      }
-      if (ri.anAsManual !== undefined && (!Number.isFinite(ri.anAsManual) || ri.anAsManual <= 0)) {
-        return makeErr(
-          'المساحة اليدوية للحديد (As) غير صالحة',
-          'قيمة As اليدوية يجب أن تكون رقماً موجباً بـ mm².',
-          'أدخل مساحة موجبة أو اترك الحقل فارغاً ليتم حسابها من القضبان.'
-        );
-      }
-      const maxAnD = inp.h - inp.cover - inp.stirrupDia - 4;
-      if (ri.anDManual !== undefined && (!Number.isFinite(ri.anDManual) || ri.anDManual <= 0 || ri.anDManual > maxAnD)) {
-        return makeErr(
-          'العمق الفعال اليدوي (d) في وضع التحليل غير صالح',
-          'العمق d المُدخل (' + (Number.isFinite(ri.anDManual) ? C.roundTo(ri.anDManual, 1) + ' mm' : 'غير رقمي') + ') يجب أن يكون موجباً وأقل من الحد الفيزيائي للمقطع (' + C.roundTo(maxAnD, 1) + ' mm).',
-          'أدخل قيمة d أقل من ' + C.roundTo(maxAnD, 0) + ' mm أو اترك الخانة فارغة ليُحسب تلقائياً.'
+          'عرض الشفة (bf) أصغر من عرض الجذع (bw)',
+          'في مقطع Isolated T يجب أن يكون عرض الشفة bf أكبر من أو مساوياً لعرض الجذع bw.',
+          'زِد قيمة bf لتكون أكبر من bw.'
         );
       }
     }
@@ -5874,14 +6039,14 @@ html, body {
         }
       }
     } else {
-      if ((ri.spanPresent && !Number.isFinite(ri.spanMeters)) || inp.spanMeters <= 0 || inp.spanMeters > 35) {
+      if (!Number.isFinite(ri.spanMeters) || ri.spanMeters <= 0 || ri.spanMeters > 35) {
         return makeErr(
           'طول الفضاء (L) خارج النطاق المنطقي',
-          'القيمة المُدخلة لطول الفضاء (' + (Number.isFinite(ri.spanMeters) ? C.roundTo(ri.spanMeters, 2) + ' m' : 'فارغة أو غير رقمية') + ') غير منطقية لجسر خرساني اعتيادي (0.5–35 m).',
+          'القيمة المُدخلة لطول الفضاء (' + (Number.isFinite(ri.spanMeters) ? C.roundTo(ri.spanMeters, 2) + ' m' : 'غير رقمية') + ') غير منطقية لجسر خرساني اعتيادي (0.5–35 m).',
           'تأكد أن طول الفضاء مُدخل بالمتر (مثلاً 6 m وليس 6000 mm).'
         );
       }
-      if ((ri.dlPresent && !Number.isFinite(ri.dl)) || inp.dl < 0 || (ri.llPresent && !Number.isFinite(ri.ll)) || inp.ll < 0) {
+      if (!Number.isFinite(ri.dl) || ri.dl < 0 || !Number.isFinite(ri.ll) || ri.ll < 0) {
         return makeErr(
           'قيم الأحمال (DL / LL) غير صالحة',
           'الحمل الميت DL والحمل الحي LL يجب أن يكونا أرقاماً غير سالبة.',
@@ -5959,17 +6124,6 @@ html, body {
         };
       }
 
-      // 2b. User forced Doubly Reinforced on a small moment where c1 <= d'
-      if (inp.reinforcementMode === 'doubly' && hasShallowNA) {
-        return {
-          valid: false,
-          error: 'العزم صغير ولا يحتاج تسليحاً ثنائياً (c1 ≤ d\').',
-          errorTitle: 'العزم صغير — التسليح الثنائي (Doubly) غير فعّال لهذا المقطع',
-          errorReason: secPrefix + 'العزم المصعّد (Mu = ' + C.roundTo(mu, 1) + ' kN·m) صغير مقارنة بأبعاد المقطع، مما يجعل عمق محور التعادل (c1) أقل من عمق حديد الضغط (d\') فيفقد حديد الضغط فعاليته.',
-          errorSolution: 'حوّل نظام التسليح إلى "تلقائي (Auto)" أو "أحادي (Singly)" — فالمقطع يتحمل هذا العزم بتسليح أحادي بسهولة.',
-        };
-      }
-
       // 3. Neither Singly nor Doubly satisfies flexural strength or ductility
       if ((mu > 0 && phiMn < mu - 1e-3) || dr.phiZone === 'compression' || hasShallowNA) {
         const extraCause = hasShallowNA
@@ -6020,11 +6174,69 @@ html, body {
     return solved;
   }
 
+  function hasTextVal(v) {
+    return v !== undefined && v !== null && String(v).trim() !== '';
+  }
+
+  function hasMinimalRequiredInputs(raw) {
+    if (!raw || !hasTextVal(raw.fc) || !hasTextVal(raw.fy)) return false;
+    if ((raw.mode === 'analysis' || !raw.autoSize) && (!hasTextVal(raw.bw) || !hasTextVal(raw.h))) {
+      return false;
+    }
+    if (raw.supportType === 'direct_moment') {
+      return raw.mode === 'design' ? hasTextVal(raw.directMoment) : true;
+    }
+    if (raw.supportType === 'continuous_aci') {
+      const sp = (raw.continuous && raw.continuous.spans) || [];
+      return sp.length >= 2 && sp.every(function (s) {
+        return hasTextVal(s.ln) && (hasTextVal(s.wuDirect) || hasTextVal(s.dl) || hasTextVal(s.ll));
+      });
+    }
+    return hasTextVal(raw.spanMeters) && (Boolean(raw.slabTransfer && raw.slabTransfer.enabled) || hasTextVal(raw.wuDirect) || hasTextVal(raw.dl) || hasTextVal(raw.ll));
+  }
+
+  function missingFieldsMsg(raw) {
+    const m = [];
+    if (raw.mode === 'analysis' || !raw.autoSize) {
+      if (!hasTextVal(raw.bw)) m.push('عرض الجذع bw');
+      if (!hasTextVal(raw.h)) m.push('العمق الكلي h');
+    }
+    if (raw.supportType === 'direct_moment') {
+      if (raw.mode === 'design' && !hasTextVal(raw.directMoment)) m.push('العزم المصعّد Mu');
+    } else if (raw.supportType === 'continuous_aci') {
+      m.push('بيانات فضاءات الجسر المستمر (ln و DL/LL)');
+    } else {
+      if (!hasTextVal(raw.spanMeters)) m.push('طول الفضاء L');
+      if (!(raw.slabTransfer && raw.slabTransfer.enabled) && !hasTextVal(raw.wuDirect) && !hasTextVal(raw.dl) && !hasTextVal(raw.ll)) m.push('الحمل الميت DL أو الحي LL');
+    }
+    if (!hasTextVal(raw.fc)) m.push('مقاومة الخرسانة f\'c');
+    if (!hasTextVal(raw.fy)) m.push('إجهاد الخضوع fy');
+    return m.length ? m.join('، ') : 'بيانات الجسر الأساسية';
+  }
+
   /**
    * Main Unified Entry Point
    */
-  function solveBeam(rawInput) {
-    const inp = normalizeInput(rawInput || {});
+  function solveBeam(rawInput, allowEmptyPrompt) {
+    const rawSafe = rawInput || {};
+    const allowEmpty = allowEmptyPrompt !== false;
+    if (!hasMinimalRequiredInputs(rawSafe)) {
+      if (allowEmpty) {
+        return {
+          valid: true,
+          empty: true,
+          title: 'جاهز لإدخال بيانات الجسر',
+          message: 'أدخل الأبعاد والأحمال ومقاومة الخرسانة والحديد ثم اضغط «احسب وصمّم المقطع»، أو اختر مثالاً توضيحياً من قائمة الأمثلة بالأعلى.',
+        };
+      }
+      return {
+        valid: false,
+        errorTitle: 'المدخلات الأساسية غير مكتملة',
+        errorReason: 'الحقول المطلوبة التالية لا تزال فارغة: ' + missingFieldsMsg(rawSafe) + '.',
+        errorSolution: 'أكمل القيم المطلوبة واضغط «احسب وصمّم المقطع»، أو اختر مثالاً جاهزاً من قائمة «أمثلة جاهزة» بالأعلى.',
+      };
+    }
+    const inp = normalizeInput(rawSafe);
 
     const preErr = validatePreSolveInputs(inp);
     if (preErr) return preErr;
@@ -6117,6 +6329,7 @@ html, body {
       loadResult: loadResult,
       designResult: designDetail,
       warnings: warnings,
+      structuredWarnings: designDetail.structuredWarnings || [],
     }, inp);
   }
 
@@ -6225,11 +6438,20 @@ html, body {
     if (!analysisResult.valid) return analysisResult;
 
     const warnings = analysisResult.warnings.slice();
+    const structuredWarnings = [];
     if (loadResult.deflection && !loadResult.deflection.isAdequate && inp.supportType !== 'direct_moment') {
       warnings.unshift('تنبيه الهطول (ACI Table 9.3.1.1): الارتفاع الكلي h (' + inp.h + ' mm) أقل من الحد الأدنى الموصى به h_min (' + C.roundTo(loadResult.deflection.hMin, 1) + ' mm).');
     }
     if (!tensionLayout.spacingOk) {
-      warnings.push('تحذير التباعد: المسافة الصافية (' + C.roundTo(tensionLayout.clearSpacing, 1) + ' mm) أقل من الحد الأدنى (' + C.roundTo(tensionLayout.minClearSpacing, 1) + ' mm).');
+      const sActStr = C.roundTo(tensionLayout.clearSpacing, 1);
+      const sMinStr = C.roundTo(tensionLayout.minClearSpacing, 1);
+      const bwNeed = Math.ceil((2 * (inp.cover + inp.stirrupDia) + Math.ceil(tensionCount / 2) * tensionBar.diameter + Math.max(0, Math.ceil(tensionCount / 2) - 1) * tensionLayout.minClearSpacing) / 25) * 25;
+      warnings.push('تحذير التباعد: المسافة الصافية (' + sActStr + ' mm) أقل من الحد الأدنى (' + sMinStr + ' mm).');
+      structuredWarnings.push({
+        title: 'تحذير تكدّس وتباعد قضبان التسليح (ACI 25.2)',
+        reason: 'عدد القضبان المُدخل (' + tensionCount + tensionBar.id + ') ضمن عرض الجذع الحالي (bw = ' + C.roundTo(inp.bw, 0) + ' mm) يعطي مسافة صافية s = ' + sActStr + ' mm < الحد الأدنى s_min = ' + sMinStr + ' mm (أقصى سعة للصف الواحد ' + tensionLayout.maxPerLayer + ' قضبان).',
+        solution: 'زِد عرض الجذع bw إلى ' + bwNeed + ' mm على الأقل، أو اختر قطراً أكبر (مثل Ø20 أو Ø25) بعدد قضبان أقل ضمن طبقتين.',
+      });
     }
 
     const unifiedResult = Object.assign({}, analysisResult, {
@@ -6267,6 +6489,7 @@ html, body {
       loadResult: loadResult,
       designResult: unifiedResult,
       warnings: unifiedResult.warnings,
+      structuredWarnings: structuredWarnings,
     };
   }
 
@@ -6683,8 +6906,8 @@ html, body {
     const svgW = 740;
     const svgH = 540;
 
-    const secAreaLeft = 92;
-    const secAreaWidth = 390;
+    const secAreaLeft = 105;
+    const secAreaWidth = 440;
     const secAreaTop = 92;
     const secAreaHeight = 320;
 
@@ -6818,7 +7041,7 @@ html, body {
 
     const dY = isNeg ? (geom.h - geom.dActual) : geom.dActual;
     const dStartY = isNeg ? geom.h : 0;
-    const dDimX = Math.max(tx(geom.totalWidth), tx(geom.webRight)) + 114;
+    const dDimX = Math.max(tx(geom.totalWidth), tx(geom.webRight)) + 44;
     if (Math.abs(dY - dStartY) > 10) {
       parts.push('<line x1="' + dDimX + '" y1="' + ty(dStartY) + '" x2="' + dDimX + '" y2="' + ty(dY) + '" stroke="#0369a1" stroke-width="1.1" marker-start="url(#arrow-comp)" marker-end="url(#arrow-comp)" />');
       parts.push('<text x="' + (dDimX + 10) + '" y="' + ((ty(dStartY) + ty(dY)) / 2 + 4) + '" text-anchor="start" ' + dimFont + ' fill="#0369a1">d = ' + C.roundTo(geom.dActual, 1) + ' mm</text>');
@@ -7022,39 +7245,27 @@ html, body {
       parts.push('<text x="' + (endX + (align === 'start' ? 6 : -6)) + '" y="' + (elbowY + 4) + '" text-anchor="' + align + '" ' + calloutFont + '>' + label + '</text>');
     };
 
-    // Right side callouts: Top Steel + Stirrups + Bottom Steel with guaranteed vertical spacing
+    // Right side callouts: Top Steel + Stirrups + Bottom Steel
     const rightAnchorX = Math.max(tx(geom.totalWidth), tx(geom.webRight)) + 28;
     const rightEndX = rightAnchorX + 24;
-    const minLeaderGap = 24;
-
-    let topElbowY = topBars.length
-      ? (geom.sectionType !== 'rectangular' && !isNeg
-        ? Math.max(ty(0) + 14, ty(topBars[topBars.length - 1].cy))
-        : (ty(topBars[topBars.length - 1].cy) - 10))
-      : (ty(0) + 14);
-    let stirrupElbowY = stY + stH * 0.48;
-    let botElbowY = botBars.length ? (ty(botBars[botBars.length - 1].cy) + 6) : (ty(geom.h) - 10);
-
-    // Prevent vertical overlap on wide shallow sections
-    if (stirrupElbowY < topElbowY + minLeaderGap) {
-      stirrupElbowY = topElbowY + minLeaderGap;
-    }
-    if (botElbowY < stirrupElbowY + minLeaderGap) {
-      botElbowY = stirrupElbowY + minLeaderGap;
-    }
-
     if (topBars.length) {
       const tb = topBars[topBars.length - 1];
+      const topElbowY = geom.sectionType !== 'rectangular' && !isNeg
+        ? Math.max(ty(0) + 14, ty(tb.cy))
+        : (ty(tb.cy) - 10);
       drawLeader(tx(tb.cx), ty(tb.cy), rightAnchorX, topElbowY, rightEndX, topBarLabel, 'start');
     }
 
+    // Stirrups leader pointing to right vertical leg at mid-height
+    const stirrupMidY = stY + stH * 0.45;
     const stirrupLegX = stX + stW;
     const shText = 'STIRRUPS: ' + (geom.shearCallout || ('Ø' + geom.stirrupDia));
-    drawLeader(stirrupLegX, stY + stH * 0.45, rightAnchorX, stirrupElbowY, rightEndX, shText, 'start');
+    drawLeader(stirrupLegX, stirrupMidY, rightAnchorX, stirrupMidY, rightEndX, shText, 'start');
 
+    // Bottom Steel leader pointing to bottom-right bar
     if (botBars.length) {
       const bb = botBars[botBars.length - 1];
-      drawLeader(tx(bb.cx), ty(bb.cy), rightAnchorX, botElbowY, rightEndX, botBarLabel, 'start');
+      drawLeader(tx(bb.cx), ty(bb.cy), rightAnchorX, ty(bb.cy) + 6, rightEndX, botBarLabel, 'start');
     }
 
     // Left side callout: Concrete Cover pointing to bottom-left clear cover zone
@@ -7346,7 +7557,7 @@ html, body {
   const S = root.BeamSolver;
   const R = root.CADSvgRenderer;
 
-  const STORAGE_KEY = 'aci_rc_beam_state_v1';
+  const STORAGE_KEY = 'aci_rc_beam_state_v12';
 
   const PRESETS = {
     auto_ex6: {
@@ -7407,13 +7618,30 @@ html, body {
     },
   };
 
+  const EMPTY_INPUT = {
+    mode: 'design', sectionType: 'rectangular', supportType: 'simply_supported',
+    reinforcementMode: 'auto', autoSize: true, momentSign: 'positive',
+    beamTag: '', spanMeters: '', bw: '', h: '', hf: '', s1Mm: '', s2Mm: '', bfActual: '',
+    dl: '', ll: '', directMoment: '', directVu: '', fcSpecimenType: 'cylinder',
+    fc: '', fy: '', es: 200000, epsCu: 0.003, gammaC: 24, cover: 40,
+    stirrupDia: 10, aggSize: 19, layerClearSpacing: 25, loadFactorDL: 1.2, loadFactorLL: 1.6,
+    barStandard: 'metric', preferredBarDia: '',
+    analysis: { tensionBarCount: '', tensionBarDia: '20', tensionLayers: '0', compBarCount: '', compBarDia: '16' }
+  };
+
   let state = {
     mode: 'design',
     momentSign: 'positive',
     activeContSection: 'mid_pos',
+    showSectionKpis: false,
+    cadPreviewAutoCad: false,
     showExtraDetails: false,
     activeDetailTab: 'steps',
     printMode: 'autocad',
+    themeMode: 'system',
+    zoomScale: 1,
+    zoomTx: 0,
+    zoomTy: 0,
     lastSolved: null,
     lastRawInput: null,
     continuousSpans: [
@@ -7489,10 +7717,12 @@ html, body {
     if (lbl) {
       lbl.textContent = isCube ? 'مقاومة المكعب fcu (MPa)' : 'مقاومة الأسطوانة f\'c (MPa)';
     }
+    const fcBlank = !el('fc').value || el('fc').value.trim() === '';
+    const fyBlank = !el('fy').value || el('fy').value.trim() === '';
     if (hint) {
-      const outOfRange = !Number.isFinite(fc) || fc < 17 - 1e-6 || fc > 55 + 1e-6;
+      const outOfRange = !fcBlank && (!Number.isFinite(fc) || fc < 17 - 1e-6 || fc > 55 + 1e-6);
       hint.classList.toggle('invalid', outOfRange);
-      if (!Number.isFinite(fcRaw) || fcRaw <= 0) {
+      if (fcBlank || !Number.isFinite(fcRaw) || fcRaw <= 0) {
         hint.textContent = isCube ? 'النطاق المسموح للمكعب: 21.25–68.75 MPa' : 'النطاق المسموح للأسطوانة: 17–55 MPa';
       } else if (isCube) {
         hint.textContent = 'المكافئ الأسطواني f\'c = ' + C.roundTo(fc, 2) + ' MPa (المسموح: 17–55 MPa)';
@@ -7501,9 +7731,14 @@ html, body {
       }
     }
 
+    if (fcBlank || fyBlank) {
+      el('liveLimitsBar').innerHTML =
+        '<span style="color:var(--text-secondary);font-weight:500;">أدخل مقاومة الخرسانة f\'c وإجهاد الخضوع fy لعرض حدود الكود (ACI 318-19)</span>';
+      return;
+    }
     if (!Number.isFinite(fc) || fc < 17 - 1e-6 || fc > 55 + 1e-6) {
       el('liveLimitsBar').innerHTML =
-        '<span class="limits-chip" style="color:#dc2626;border-color:#fca5a5;">f\'c خارج النطاق الإنشائي (17–55 MPa)</span>';
+        '<span class="limits-chip" style="color:var(--danger);border-color:var(--danger-border);">f\'c خارج النطاق الإنشائي (17–55 MPa)</span>';
       return;
     }
     if (fy <= 0 || es <= 0 || epsCu <= 0) return;
@@ -7590,14 +7825,10 @@ html, body {
     el('btnModeAnalysis').classList.toggle('active', !isDesign);
 
     const isNeg = state.momentSign === 'negative';
-    ['btnSignPos', 'btnCadSignPos'].forEach(function (id) {
-      el(id).classList.toggle('active', !isNeg);
-      el(id).classList.remove('neg');
-    });
-    ['btnSignNeg', 'btnCadSignNeg'].forEach(function (id) {
-      el(id).classList.toggle('active', isNeg);
-      el(id).classList.toggle('neg', isNeg);
-    });
+    el('btnSignPos').classList.toggle('active', !isNeg);
+    el('btnSignPos').classList.remove('neg');
+    el('btnSignNeg').classList.toggle('active', isNeg);
+    el('btnSignNeg').classList.toggle('neg', isNeg);
 
     el('reinforcementModeWrap').classList.toggle('hidden', !isDesign);
     el('autoSizeRow').classList.toggle('hidden', !isDesign);
@@ -7626,11 +7857,19 @@ html, body {
     const showOverlap = (secType === 't_beam' || secType === 'l_beam') && slabEnabled && slabInclSelf;
     el('slabIncludesWebWidthWrap').classList.toggle('hidden', !showOverlap);
 
-    // Extra Details (Tabbed Steps, B.M.D, S.F.D) hidden by default
+    // CAD Preview style + Hidden KPIs + Bottom Steps Drawer
+    el('btnToggleCadStyle').textContent = state.cadPreviewAutoCad
+      ? '⇄ الشكل الملون (CAD)'
+      : '⇄ عرض أوتوكاد (AutoCAD)';
+    el('kpiGrid').classList.toggle('hidden', !state.showSectionKpis);
+    el('btnToggleKpis').textContent = state.showSectionKpis
+      ? 'إخفاء معلومات المقطع والخصائص (ρ, a, φ, As...)'
+      : 'عرض معلومات المقطع والخصائص الهندسية (ρ, a, φ, As...)';
+
     el('extraDetailsDrawer').classList.toggle('hidden', !state.showExtraDetails);
     el('btnToggleDetails').textContent = state.showExtraDetails
-      ? 'إخفاء Steps & B.M.D / S.F.D'
-      : 'إظهار Steps & B.M.D / S.F.D';
+      ? 'إخفاء خطوات الحل والمخططات (Steps & Diagrams)'
+      : 'إظهار خطوات الحل ومخططات العزم والقص (Steps & B.M.D / S.F.D)';
 
     document.querySelectorAll('.drawer-tab-btn').forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.tab === state.activeDetailTab);
@@ -7639,10 +7878,7 @@ html, body {
     el('tabPanelBmd').classList.toggle('hidden', state.activeDetailTab !== 'bmd');
     el('tabPanelSfd').classList.toggle('hidden', state.activeDetailTab !== 'sfd');
 
-    if (el('exteriorEndWrap')) {
-      el('exteriorEndWrap').classList.toggle('hidden', supType !== 'one_end_continuous');
-    }
-    el('btnRun').textContent = isDesign ? 'احسب وصمّم المقطع (Enter)' : 'حلّل المقطع القائم (Enter)';
+    el('btnRun').textContent = isDesign ? 'Calculate & Design (Enter)' : 'Analyze Section (Enter)';
     updateLiveLimitsBar();
   }
 
@@ -7656,7 +7892,6 @@ html, body {
       projectTitle: el('cadProjectTitle').value,
       sectionType: secType,
       supportType: supType,
-      exteriorEndType: el('exteriorEndType') ? el('exteriorEndType').value : 'column',
       reinforcementMode: el('reinforcementMode').value,
       autoSize: state.mode === 'design' && el('autoSizeToggle').checked,
       hMax: el('hMax').value,
@@ -7736,9 +7971,12 @@ html, body {
       const payload = {
         rawInput: rawInput,
         activeContSection: state.activeContSection,
+        showSectionKpis: state.showSectionKpis,
+        cadPreviewAutoCad: state.cadPreviewAutoCad,
         showExtraDetails: state.showExtraDetails,
         activeDetailTab: state.activeDetailTab,
         printMode: state.printMode,
+        themeMode: state.themeMode,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {}
@@ -7748,36 +7986,36 @@ html, body {
     if (!d) return;
     state.mode = d.mode || 'design';
     state.momentSign = d.momentSign || (d.supportType === 'cantilever' ? 'negative' : 'positive');
-    el('beamTag').value = d.beamTag || 'B1';
-    el('cadBeamMark').value = d.beamTag || 'B1';
+    el('beamTag').value = d.beamTag !== undefined ? d.beamTag : '';
+    el('cadBeamMark').value = (d.beamTag && String(d.beamTag).trim()) ? d.beamTag : 'B1';
     if (d.projectTitle !== undefined) el('cadProjectTitle').value = d.projectTitle;
     el('sectionType').value = d.sectionType || 'rectangular';
     el('reinforcementMode').value = d.reinforcementMode || 'auto';
     el('supportType').value = d.supportType || 'simply_supported';
-    el('autoSizeToggle').checked = Boolean(d.autoSize);
+    el('autoSizeToggle').checked = d.autoSize !== undefined ? Boolean(d.autoSize) : true;
     el('hMax').value = d.hMax !== undefined ? d.hMax : '';
     if (el('bwMax')) el('bwMax').value = d.bwMax !== undefined ? d.bwMax : '';
     el('bwFixed').value = d.bwFixed !== undefined ? d.bwFixed : '';
-    el('spanMeters').value = d.spanMeters !== undefined ? d.spanMeters : 6;
-    el('bw').value = d.bw !== undefined ? d.bw : 300;
-    el('h').value = d.h !== undefined ? d.h : 500;
+    el('spanMeters').value = d.spanMeters !== undefined ? d.spanMeters : '';
+    el('bw').value = d.bw !== undefined ? d.bw : '';
+    el('h').value = d.h !== undefined ? d.h : '';
     el('dOverride').value = d.dOverride !== undefined ? d.dOverride : '';
     el('dPrimeOverride').value = d.dPrimeOverride !== undefined ? d.dPrimeOverride : '';
-    el('hf').value = d.hf !== undefined ? d.hf : 150;
-    el('s1Mm').value = d.s1Mm !== undefined ? d.s1Mm : 3000;
-    el('s2Mm').value = d.s2Mm !== undefined ? d.s2Mm : 3000;
-    el('bfActual').value = d.bfActual !== undefined ? d.bfActual : 700;
-    el('dl').value = d.dl !== undefined ? d.dl : 25;
-    el('ll').value = d.ll !== undefined ? d.ll : 10;
+    el('hf').value = d.hf !== undefined ? d.hf : '';
+    el('s1Mm').value = d.s1Mm !== undefined ? d.s1Mm : '';
+    el('s2Mm').value = d.s2Mm !== undefined ? d.s2Mm : '';
+    el('bfActual').value = d.bfActual !== undefined ? d.bfActual : '';
+    el('dl').value = d.dl !== undefined ? d.dl : '';
+    el('ll').value = d.ll !== undefined ? d.ll : '';
     el('loadFactorDL').value = d.loadFactorDL !== undefined ? d.loadFactorDL : 1.2;
     el('loadFactorLL').value = d.loadFactorLL !== undefined ? d.loadFactorLL : 1.6;
     el('dlIncludesSelfWeight').checked = Boolean(d.dlIncludesSelfWeight);
     el('slabIncludesWebWidth').checked = Boolean(d.slabIncludesWebWidth);
-    el('directMoment').value = d.directMoment !== undefined ? d.directMoment : 307;
-    el('directVu').value = d.directVu !== undefined ? d.directVu : 0;
+    el('directMoment').value = d.directMoment !== undefined ? d.directMoment : '';
+    el('directVu').value = d.directVu !== undefined ? d.directVu : '';
     if (el('fcSpecimenType')) el('fcSpecimenType').value = d.fcSpecimenType || 'cylinder';
-    el('fc').value = d.fc !== undefined ? d.fc : 28;
-    el('fy').value = d.fy !== undefined ? d.fy : 420;
+    el('fc').value = d.fc !== undefined ? d.fc : '';
+    el('fy').value = d.fy !== undefined ? d.fy : '';
     el('es').value = d.es !== undefined ? d.es : 200000;
     el('epsCu').value = d.epsCu !== undefined ? d.epsCu : 0.003;
     el('rhoTargetCustom').value = d.rhoTargetCustom !== undefined ? d.rhoTargetCustom : '';
@@ -7787,23 +8025,22 @@ html, body {
     el('aggSize').value = d.aggSize !== undefined ? d.aggSize : 19;
     el('layerClearSpacing').value = d.layerClearSpacing !== undefined ? d.layerClearSpacing : 25;
 
-    if (el('exteriorEndType')) {
-      el('exteriorEndType').value = d.exteriorEndType || 'column';
+    if (d.barStandard) {
+      el('barStandard').value = d.barStandard;
+      populateBarSelectors();
     }
-    el('barStandard').value = d.barStandard || 'metric';
-    populateBarSelectors();
-    el('preferredBarDia').value = d.preferredBarDia ? String(d.preferredBarDia) : '';
+    el('preferredBarDia').value = d.preferredBarDia || '';
 
     const slab = d.slabTransfer || {};
     el('slabEnableToggle').checked = Boolean(slab.enabled);
-    el('slabMode').value = slab.mode || 'auto';
-    el('slabBeamPos').value = slab.beamPosition || 'interior';
-    el('slabBeamDir').value = slab.beamDirection || 'long';
-    el('slabS1').value = slab.s1 !== undefined ? slab.s1 : 4;
-    el('slabS2').value = slab.s2 !== undefined ? slab.s2 : 4;
-    el('slabCant').value = slab.cantileverWidth !== undefined ? slab.cantileverWidth : 0;
-    el('slabDL').value = slab.slabDL !== undefined ? slab.slabDL : 5;
-    el('slabLL').value = slab.slabLL !== undefined ? slab.slabLL : 3;
+    if (slab.mode) el('slabMode').value = slab.mode;
+    if (slab.beamPosition) el('slabBeamPos').value = slab.beamPosition;
+    if (slab.beamDirection) el('slabBeamDir').value = slab.beamDirection;
+    if (slab.s1 !== undefined) el('slabS1').value = slab.s1;
+    if (slab.s2 !== undefined) el('slabS2').value = slab.s2;
+    if (slab.cantileverWidth !== undefined) el('slabCant').value = slab.cantileverWidth;
+    if (slab.slabDL !== undefined) el('slabDL').value = slab.slabDL;
+    if (slab.slabLL !== undefined) el('slabLL').value = slab.slabLL;
     el('slabIncludeSelf').checked = Boolean(slab.includeSlabSelfWeight);
 
     if (d.continuous) {
@@ -7823,14 +8060,15 @@ html, body {
       renderContinuousSpansEditor();
     }
 
-    const an = d.analysis || {};
-    el('anTensionCount').value = an.tensionBarCount !== undefined ? an.tensionBarCount : 4;
-    if (an.tensionBarDia) el('anTensionDia').value = an.tensionBarDia;
-    el('anTensionLayers').value = an.tensionLayers !== undefined ? String(an.tensionLayers) : '0';
-    el('anCompCount').value = an.compBarCount !== undefined ? an.compBarCount : 0;
-    if (an.compBarDia) el('anCompDia').value = an.compBarDia;
-    el('anAsManual').value = an.asManual !== undefined ? an.asManual : '';
-    el('anDManual').value = an.dManual !== undefined ? an.dManual : '';
+    if (d.analysis) {
+      el('anTensionCount').value = d.analysis.tensionBarCount !== undefined ? d.analysis.tensionBarCount : '';
+      if (d.analysis.tensionBarDia) el('anTensionDia').value = d.analysis.tensionBarDia;
+      el('anTensionLayers').value = d.analysis.tensionLayers || '0';
+      el('anCompCount').value = d.analysis.compBarCount !== undefined ? d.analysis.compBarCount : '';
+      if (d.analysis.compBarDia) el('anCompDia').value = d.analysis.compBarDia;
+      el('anAsManual').value = d.analysis.asManual || '';
+      el('anDManual').value = d.analysis.dManual || '';
+    }
   }
 
   function loadStateFromStorage() {
@@ -7838,7 +8076,12 @@ html, body {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return false;
       const parsed = JSON.parse(raw);
+      if (parsed && parsed.themeMode) {
+        state.themeMode = parsed.themeMode;
+      }
       if (parsed && parsed.rawInput) {
+        state.showSectionKpis = Boolean(parsed.showSectionKpis);
+        state.cadPreviewAutoCad = Boolean(parsed.cadPreviewAutoCad);
         state.showExtraDetails = Boolean(parsed.showExtraDetails);
         if (parsed.activeDetailTab) state.activeDetailTab = parsed.activeDetailTab;
         if (parsed.printMode === 'standard' || parsed.printMode === 'autocad') state.printMode = parsed.printMode;
@@ -7852,10 +8095,35 @@ html, body {
 
   function renderResults(solved, rawInput) {
     const errPanel = el('errorPanel');
+    const emptyPanel = el('emptyPanel');
     const cadWrap = el('cadContainer');
+    const cadStage = el('cadStage');
+    const cadToolbar = el('cadToolbar');
+    const kpiToggleWrap = el('kpiToggleWrap');
+    const detailsToggleWrap = el('detailsToggleWrap');
     const kpiGrid = el('kpiGrid');
     const contPanelEl = el('continuousOutputPanel');
     const drawerEl = el('extraDetailsDrawer');
+
+    if (solved && solved.empty) {
+      el('statusBar').innerHTML = '';
+      el('alertList').innerHTML = '';
+      el('alertList').classList.add('hidden');
+      if (errPanel) { errPanel.innerHTML = ''; errPanel.classList.add('hidden'); }
+      if (emptyPanel) {
+        el('emptyTitle').textContent = solved.title || 'جاهز لإدخال بيانات الجسر';
+        el('emptyMessage').textContent = solved.message || '';
+        emptyPanel.classList.remove('hidden');
+      }
+      if (cadToolbar) cadToolbar.classList.add('hidden');
+      if (cadStage) cadStage.classList.add('hidden');
+      if (kpiToggleWrap) kpiToggleWrap.classList.add('hidden');
+      if (detailsToggleWrap) detailsToggleWrap.classList.add('hidden');
+      if (kpiGrid) kpiGrid.classList.add('hidden');
+      if (contPanelEl) contPanelEl.classList.add('hidden');
+      if (drawerEl) drawerEl.classList.add('hidden');
+      return;
+    }
 
     if (!solved || !solved.valid) {
       const title = (solved && solved.errorTitle) ? solved.errorTitle : 'تعذّر إتمام التصميم';
@@ -7865,6 +8133,7 @@ html, body {
       el('statusBar').innerHTML = '<span class="badge badge-danger">خطأ تصميمي ✗ — ' + title + '</span>';
       el('alertList').innerHTML = '';
       el('alertList').classList.add('hidden');
+      if (emptyPanel) emptyPanel.classList.add('hidden');
 
       if (errPanel) {
         errPanel.innerHTML =
@@ -7874,18 +8143,26 @@ html, body {
         errPanel.classList.remove('hidden');
       }
       if (cadWrap) cadWrap.innerHTML = '';
-      if (cadWrap) cadWrap.classList.add('hidden');
-      if (kpiGrid) kpiGrid.innerHTML = '';
+      if (cadStage) cadStage.classList.add('hidden');
+      if (cadToolbar) cadToolbar.classList.add('hidden');
+      if (kpiToggleWrap) kpiToggleWrap.classList.add('hidden');
+      if (detailsToggleWrap) detailsToggleWrap.classList.add('hidden');
+      if (kpiGrid) { kpiGrid.innerHTML = ''; kpiGrid.classList.add('hidden'); }
       if (contPanelEl) contPanelEl.classList.add('hidden');
       if (drawerEl) drawerEl.classList.add('hidden');
       return;
     }
 
+    if (emptyPanel) emptyPanel.classList.add('hidden');
     if (errPanel) {
       errPanel.innerHTML = '';
       errPanel.classList.add('hidden');
     }
-    if (cadWrap) cadWrap.classList.remove('hidden');
+    if (cadToolbar) cadToolbar.classList.remove('hidden');
+    if (cadStage) cadStage.classList.remove('hidden');
+    if (kpiToggleWrap) kpiToggleWrap.classList.remove('hidden');
+    if (detailsToggleWrap) detailsToggleWrap.classList.remove('hidden');
+    if (kpiGrid) kpiGrid.classList.toggle('hidden', !state.showSectionKpis);
 
     const dr = solved.designResult;
     const lr = solved.loadResult;
@@ -7920,11 +8197,26 @@ html, body {
 
     el('statusBar').innerHTML = badges.join('');
 
-    // 2. Concise Warnings
-    if (solved.warnings && solved.warnings.length) {
-      el('alertList').innerHTML = solved.warnings.map(function (w) {
-        return '<div class="alert-item">⚠ ' + w + '</div>';
-      }).join('');
+    // 2. Structured Advisories (e.g. Ø12 reason + solution) & Concise Warnings
+    const alertParts = [];
+    const sWarns = solved.structuredWarnings || [];
+    sWarns.forEach(function (n) {
+      alertParts.push(
+        '<div class="advisory-panel">' +
+          '<div class="advisory-title">⚠ ' + n.title + '</div>' +
+          '<div class="advisory-block"><span class="advisory-block-label">سبب التعذّر / التعديل:</span>' + n.reason + '</div>' +
+          '<div class="advisory-block solution"><span class="advisory-block-label">الحل الهندسي المقترح:</span>' + n.solution + '</div>' +
+        '</div>'
+      );
+    });
+    const extraW = sWarns.length
+      ? (solved.warnings || []).filter(function (w) { return w.indexOf('تنبيه القطر المفضّل') === -1 && w.indexOf('تحذير التباعد') === -1; })
+      : (solved.warnings || []);
+    extraW.forEach(function (w) {
+      alertParts.push('<div class="alert-item">⚠ ' + w + '</div>');
+    });
+    if (alertParts.length) {
+      el('alertList').innerHTML = alertParts.join('');
       el('alertList').classList.remove('hidden');
     } else {
       el('alertList').innerHTML = '';
@@ -7981,13 +8273,17 @@ html, body {
       contPanel.classList.add('hidden');
     }
 
-    // 4. CAD Cross Section SVG (Standard View)
+    // 4. Live CAD Cross Section SVG (Colored CAD vs AutoCAD Shop Drawing)
     const svgOpts = {
       cover: C.parseArabicNumber(rawInput.cover, 40),
       stirrupDia: C.parseArabicNumber(rawInput.stirrupDia, 10),
       layerClearSpacing: C.parseArabicNumber(rawInput.layerClearSpacing, 25),
+      beamMark: (rawInput.beamTag && String(rawInput.beamTag).trim()) ? String(rawInput.beamTag).trim() : 'B1',
+      projectTitle: (el('cadProjectTitle') && el('cadProjectTitle').value ? el('cadProjectTitle').value : 'RC BEAM SECTION DETAIL — ACI 318-19').trim(),
     };
-    const svgOut = R.renderBeamSectionSVG(solved, svgOpts);
+    const svgOut = state.cadPreviewAutoCad
+      ? R.renderShopDrawingSVG(solved, svgOpts)
+      : R.renderBeamSectionSVG(solved, svgOpts);
     el('cadContainer').innerHTML = svgOut.svg;
 
     // 5. Compact Section Properties Grid (including Shear & Crack/Skin)
@@ -8068,12 +8364,12 @@ html, body {
     }
   }
 
-  function runCalculation() {
+  function runCalculation(explicitSubmit) {
     updateLiveLimitsBar();
     try {
       const raw = gatherInput();
       saveStateToStorage(raw);
-      const solved = S.solveBeam(raw);
+      const solved = S.solveBeam(raw, !explicitSubmit);
       state.lastRawInput = raw;
       state.lastSolved = solved;
       renderResults(solved, raw);
@@ -8098,20 +8394,70 @@ html, body {
     showToast('Preset Loaded');
   }
 
+  function applyThemeMode(mode) {
+    state.themeMode = mode || 'system';
+    const rootEl = document.documentElement;
+    if (state.themeMode === 'dark') {
+      rootEl.setAttribute('data-theme', 'dark');
+    } else if (state.themeMode === 'light') {
+      rootEl.setAttribute('data-theme', 'light');
+    } else {
+      rootEl.removeAttribute('data-theme');
+    }
+    const btn = el('btnThemeToggle');
+    if (btn) {
+      btn.textContent = state.themeMode === 'dark' ? '🌙 ليلي' : (state.themeMode === 'light' ? '☀ نهاري' : '🌓 تلقائي');
+    }
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      const isDarkNow = state.themeMode === 'dark' || (state.themeMode === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      metaTheme.setAttribute('content', isDarkNow ? '#111c17' : '#16324f');
+    }
+  }
+
+  function applyCadZoomTransform() {
+    const wrap = el('cadContainer');
+    const out = el('btnZoomOut');
+    const rst = el('btnZoomReset');
+    const lbl = el('zoomReadout');
+    if (!wrap) return;
+    if (state.zoomScale <= 1.01) {
+      state.zoomScale = 1;
+      state.zoomTx = 0;
+      state.zoomTy = 0;
+      wrap.style.transform = '';
+      if (out) out.classList.add('hidden');
+      if (rst) rst.classList.add('hidden');
+      if (lbl) lbl.classList.add('hidden');
+    } else {
+      wrap.style.transform = 'translate(' + state.zoomTx + 'px,' + state.zoomTy + 'px) scale(' + state.zoomScale + ')';
+      if (out) out.classList.remove('hidden');
+      if (rst) rst.classList.remove('hidden');
+      if (lbl) {
+        lbl.textContent = Math.round(state.zoomScale * 100) + '%';
+        lbl.classList.remove('hidden');
+      }
+    }
+  }
+
   function resetToDefaults() {
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    state.showSectionKpis = false;
+    state.cadPreviewAutoCad = false;
     state.showExtraDetails = false;
     state.activeDetailTab = 'steps';
     state.printMode = 'autocad';
+    state.zoomScale = 1;
+    applyCadZoomTransform();
     el('cadProjectTitle').value = 'RC BEAM SECTION DETAIL — ACI 318-19';
     state.continuousSpans = [
       { ln: 6, dl: 20, ll: 12, wuDirect: '' },
       { ln: 6, dl: 20, ll: 12, wuDirect: '' },
     ];
-    applyInputToDOM(PRESETS.auto_ex6.data);
+    applyInputToDOM(EMPTY_INPUT);
     updateVisibility();
-    runCalculation();
-    showToast('تمت إعادة الضبط الافتراضية');
+    runCalculation(false);
+    showToast('تم تفريغ الحقول — جاهز لإدخال معطيات جديدة');
   }
 
   function downloadFile(filename, content, mime) {
@@ -8132,9 +8478,11 @@ html, body {
 
     const isAutoCad = state.printMode === 'autocad';
     el('autocadMetaWrap').classList.toggle('hidden', !isAutoCad);
-    el('btnDownloadAutoCadSvg').classList.toggle('hidden', !isAutoCad);
+    if (el('btnDownloadModalSvg')) {
+      el('btnDownloadModalSvg').textContent = isAutoCad ? 'تحميل AutoCAD SVG' : 'تحميل CAD SVG';
+    }
 
-    if (!state.lastSolved || !state.lastSolved.valid) {
+    if (!state.lastSolved || !state.lastSolved.valid || state.lastSolved.empty) {
       el('autocadPreviewBox').innerHTML = '';
       el('autocadPrintMount').innerHTML = '';
       return;
@@ -8202,8 +8550,6 @@ html, body {
     };
     el('btnSignPos').addEventListener('click', function () { setSign('positive'); });
     el('btnSignNeg').addEventListener('click', function () { setSign('negative'); });
-    el('btnCadSignPos').addEventListener('click', function () { setSign('positive'); });
-    el('btnCadSignNeg').addEventListener('click', function () { setSign('negative'); });
 
     el('supportType').addEventListener('change', function () {
       if (this.value === 'cantilever') state.momentSign = 'negative';
@@ -8222,7 +8568,7 @@ html, body {
       runCalculation();
     });
 
-    ['sectionType', 'reinforcementMode', 'autoSizeToggle', 'exteriorEndType', 'slabEnableToggle', 'slabBeamPos', 'slabMode', 'slabBeamDir', 'dlIncludesSelfWeight', 'slabIncludesWebWidth', 'contLeftEnd', 'contRightEnd', 'preferredBarDia', 'anTensionDia', 'anTensionLayers', 'anCompDia'].forEach(function (id) {
+    ['sectionType', 'reinforcementMode', 'autoSizeToggle', 'slabEnableToggle', 'slabBeamPos', 'slabMode', 'slabBeamDir', 'dlIncludesSelfWeight', 'slabIncludesWebWidth', 'contLeftEnd', 'contRightEnd', 'preferredBarDia', 'anTensionDia', 'anTensionLayers', 'anCompDia'].forEach(function (id) {
       const node = el(id);
       if (node) {
         node.addEventListener('change', function () {
@@ -8259,7 +8605,111 @@ html, body {
       runCalculation();
     });
 
-    // Toggle Hidden Steps + B.M.D / S.F.D Drawer & Switch Tabs
+    // Toggle Section KPIs, CAD Style, Bottom Steps/Diagrams, Theme & Zoom
+    el('btnThemeToggle').addEventListener('click', function () {
+      const order = ['system', 'light', 'dark'];
+      const next = order[(order.indexOf(state.themeMode) + 1) % order.length];
+      applyThemeMode(next);
+      saveStateToStorage(gatherInput());
+    });
+
+    el('btnToggleKpis').addEventListener('click', function () {
+      state.showSectionKpis = !state.showSectionKpis;
+      updateVisibility();
+      saveStateToStorage(gatherInput());
+    });
+
+    el('btnToggleCadStyle').addEventListener('click', function () {
+      state.cadPreviewAutoCad = !state.cadPreviewAutoCad;
+      state.zoomScale = 1;
+      applyCadZoomTransform();
+      updateVisibility();
+      if (state.lastSolved && state.lastSolved.valid && !state.lastSolved.empty) {
+        renderResults(state.lastSolved, state.lastRawInput);
+      }
+      saveStateToStorage(gatherInput());
+    });
+
+    el('btnZoomIn').addEventListener('click', function () {
+      state.zoomScale = Math.min(3.5, state.zoomScale + 0.4);
+      applyCadZoomTransform();
+    });
+    el('btnZoomOut').addEventListener('click', function () {
+      state.zoomScale = Math.max(1, state.zoomScale - 0.4);
+      applyCadZoomTransform();
+    });
+    el('btnZoomReset').addEventListener('click', function () {
+      state.zoomScale = 1;
+      applyCadZoomTransform();
+    });
+    // Touch/Mouse Drag & Pinch Zoom inside CAD stage
+    (function setupStageGestures() {
+      const stage = el('cadStage');
+      if (!stage) return;
+      let dragging = false, startX = 0, startY = 0, baseTx = 0, baseTy = 0;
+      let pinchStartDist = 0, pinchStartScale = 1;
+      stage.addEventListener('dblclick', function () {
+        state.zoomScale = state.zoomScale > 1.2 ? 1 : 2.0;
+        state.zoomTx = 0; state.zoomTy = 0;
+        applyCadZoomTransform();
+      });
+      stage.addEventListener('mousedown', function (e) {
+        if (state.zoomScale <= 1.02) return;
+        dragging = true; startX = e.clientX; startY = e.clientY;
+        baseTx = state.zoomTx; baseTy = state.zoomTy;
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        const maxX = stage.clientWidth * (state.zoomScale - 1) / 2;
+        const maxY = stage.clientHeight * (state.zoomScale - 1) / 2;
+        state.zoomTx = Math.max(-maxX, Math.min(maxX, baseTx + (e.clientX - startX)));
+        state.zoomTy = Math.max(-maxY, Math.min(maxY, baseTy + (e.clientY - startY)));
+        applyCadZoomTransform();
+      });
+      window.addEventListener('mouseup', function () { dragging = false; });
+      stage.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 2) {
+          const dx = e.touches[0].clientX - e.touches[1].clientX;
+          const dy = e.touches[0].clientY - e.touches[1].clientY;
+          pinchStartDist = Math.hypot(dx, dy);
+          pinchStartScale = state.zoomScale;
+        } else if (e.touches.length === 1 && state.zoomScale > 1.02) {
+          dragging = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+          baseTx = state.zoomTx; baseTy = state.zoomTy;
+        }
+      }, { passive: true });
+      stage.addEventListener('touchmove', function (e) {
+        if (e.touches.length === 2 && pinchStartDist > 0) {
+          e.preventDefault();
+          const dx = e.touches[0].clientX - e.touches[1].clientX;
+          const dy = e.touches[0].clientY - e.touches[1].clientY;
+          state.zoomScale = Math.max(1, Math.min(3.5, pinchStartScale * (Math.hypot(dx, dy) / pinchStartDist)));
+          applyCadZoomTransform();
+        } else if (dragging && e.touches.length === 1 && state.zoomScale > 1.02) {
+          e.preventDefault();
+          const maxX = stage.clientWidth * (state.zoomScale - 1) / 2;
+          const maxY = stage.clientHeight * (state.zoomScale - 1) / 2;
+          state.zoomTx = Math.max(-maxX, Math.min(maxX, baseTx + (e.touches[0].clientX - startX)));
+          state.zoomTy = Math.max(-maxY, Math.min(maxY, baseTy + (e.touches[0].clientY - startY)));
+          applyCadZoomTransform();
+        }
+      }, { passive: false });
+      stage.addEventListener('touchend', function () { dragging = false; pinchStartDist = 0; });
+    })();
+
+    if (el('btnPickExampleFromEmpty')) {
+      el('btnPickExampleFromEmpty').addEventListener('click', function () {
+        const ps = el('presetSelect');
+        if (ps) {
+          ps.focus();
+          ps.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (typeof ps.showPicker === 'function') {
+            try { ps.showPicker(); } catch (e) {}
+          }
+        }
+      });
+    }
+
     el('btnToggleDetails').addEventListener('click', function () {
       state.showExtraDetails = !state.showExtraDetails;
       updateVisibility();
@@ -8277,7 +8727,7 @@ html, body {
       });
     });
 
-    el('btnRun').addEventListener('click', runCalculation);
+    el('btnRun').addEventListener('click', function () { runCalculation(true); });
     el('btnReset').addEventListener('click', resetToDefaults);
 
     // 250ms Debounced Live Calculation across all inputs + Enter immediate execution
@@ -8295,7 +8745,7 @@ html, body {
       if (ev.key === 'Enter' && ev.target.tagName !== 'BUTTON') {
         ev.preventDefault();
         clearTimeout(debounceTimer);
-        runCalculation();
+        runCalculation(true);
       }
     });
 
@@ -8326,12 +8776,13 @@ html, body {
         saveStateToStorage(gatherInput());
       });
     });
-    el('btnDownloadAutoCadSvg').addEventListener('click', function () {
+    el('btnDownloadModalSvg').addEventListener('click', function () {
       const svgEl = el('autocadPreviewBox').querySelector('svg');
       if (svgEl) {
-        const mark = (el('cadBeamMark').value || 'B1').replace(/[^a-zA-Z0-9_-]/g, '');
-        downloadFile('beam-' + mark + '-autocad.svg', svgEl.outerHTML, 'image/svg+xml;charset=utf-8');
-        showToast('AutoCAD SVG Downloaded');
+        const mark = (el('cadBeamMark').value || 'B1').replace(/[^a-zA-Z0-9_-]/g, '') || 'B1';
+        const suffix = state.printMode === 'autocad' ? '-autocad.svg' : '-cad.svg';
+        downloadFile('beam-' + mark + suffix, svgEl.outerHTML, 'image/svg+xml;charset=utf-8');
+        showToast('تم حفظ ملف SVG بنجاح');
       }
     });
     el('btnConfirmPrint').addEventListener('click', function () {
@@ -8354,21 +8805,16 @@ html, body {
       }, 80);
     });
 
-    el('btnDownloadSvg').addEventListener('click', function () {
-      const svgEl = el('cadContainer').querySelector('svg');
-      if (svgEl) {
-        downloadFile('beam-section-cad.svg', svgEl.outerHTML, 'image/svg+xml;charset=utf-8');
-        showToast('CAD SVG Downloaded');
-      }
-    });
-
     if ('serviceWorker' in navigator && (location.protocol === 'http:' || location.protocol === 'https:')) {
       navigator.serviceWorker.register('./sw.js').catch(function () {});
     }
 
-    loadStateFromStorage();
+    if (!loadStateFromStorage()) {
+      applyInputToDOM(EMPTY_INPUT);
+    }
+    applyThemeMode(state.themeMode);
     updateVisibility();
-    runCalculation();
+    runCalculation(false);
   }
 
   document.addEventListener('DOMContentLoaded', init);
@@ -8397,53 +8843,6 @@ html, body {
       });
     }
   });
-})();
-</script>
-
-
-<!-- === Android 15 Native Print & Download Bridge (Safe no-op on Web & Windows) === -->
-<script>
-(function () {
-  'use strict';
-  if (typeof window.AndroidNative === 'undefined') return;
-  var origPrint = window.print ? window.print.bind(window) : null;
-  window.print = function () {
-    try {
-      var markEl = document.getElementById('cadBeamMark') || document.getElementById('beamTag');
-      var mark = (markEl && markEl.value) ? markEl.value.trim() : 'B1';
-      window.AndroidNative.printPage('RC_Beam_' + mark + '_ACI318');
-    } catch (e) {
-      if (origPrint) origPrint();
-    }
-  };
-  var origCreateObjectURL = URL.createObjectURL.bind(URL);
-  var blobTextMap = new WeakMap();
-  var OrigBlob = window.Blob;
-  window.Blob = function (parts, opts) {
-    var b = new OrigBlob(parts, opts);
-    try {
-      if (Array.isArray(parts) && parts.length && typeof parts[0] === 'string') {
-        blobTextMap.set(b, { text: parts.join(''), mime: (opts && opts.type) || 'image/svg+xml' });
-      }
-    } catch (e) {}
-    return b;
-  };
-  window.Blob.prototype = OrigBlob.prototype;
-  var urlDataMap = {};
-  URL.createObjectURL = function (blob) {
-    var u = origCreateObjectURL(blob);
-    var info = blobTextMap.get(blob);
-    if (info) urlDataMap[u] = info;
-    return u;
-  };
-  document.addEventListener('click', function (ev) {
-    var a = ev.target && ev.target.closest ? ev.target.closest('a[download]') : null;
-    if (a && a.href && urlDataMap[a.href]) {
-      ev.preventDefault();
-      var info = urlDataMap[a.href];
-      window.AndroidNative.saveTextFile(a.download || 'beam-section.svg', info.text, info.mime);
-    }
-  }, true);
 })();
 </script>
 
